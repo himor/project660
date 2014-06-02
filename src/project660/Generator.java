@@ -11,7 +11,6 @@ import java.util.Random;
 public class Generator 
 {
     final static boolean DIRECTED = true;
-    static BufferedReader in;
     
     /**
      * Generate new graph
@@ -21,8 +20,7 @@ public class Generator
     public static void generate() throws IOException
     {
         boolean another_graph = true;
-        Generator gen = new Generator();
-        in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
+        
         while (another_graph) {
             Pair pair = new Pair();
             pair      = getNP();
@@ -31,9 +29,8 @@ public class Generator
             g.print_graph();
             saveGraph(g);
             
-            System.out.print("Would you like to generate another graph? [y/N]:");
+            String line = Interactor.getString("Would you like to generate another graph? [y/N]:");
             
-            String line = in.readLine();
             if (line.length() > 0) {
                 if (line.charAt(0) == 'Y' || line.charAt(0) == 'y')
                     another_graph = true;
@@ -50,29 +47,8 @@ public class Generator
      */
     private static Pair getNP() throws IOException
     {
-        int n    = -1;
-        double p = -1;
-        String line;
-
-        while (n < 0) {
-            System.out.print("\nn=");
-            line = in.readLine();
-            try {
-                n = Integer.parseInt(line);
-            } catch (NumberFormatException e) {
-                System.out.print("\nPlease type a numeric value!\n");
-            }
-        }
-        
-        while (p < 0) {
-            System.out.print("\np=");
-            line = in.readLine();
-            try {
-                p = Double.parseDouble(line);
-            } catch (NumberFormatException e) {
-                System.out.print("\nPlease type a numeric value!\n");
-            }
-        }
+        int n    = Interactor.getInt("\nn=");
+        double p = Interactor.getDouble("\np=");
         
         return new Pair(n,p);
     }
@@ -113,8 +89,7 @@ public class Generator
      */
     private static void saveGraph(Graph g) throws IOException
     {
-        System.out.print("Filename to save this graph [ENTER - don't save]:");
-        String line = in.readLine();
+        String line = Interactor.getString("Filename to save this graph [ENTER - don't save]:");
         
         if (line.length() > 0) {
             FileOutputStream fout  = new FileOutputStream(line);

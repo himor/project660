@@ -1,8 +1,6 @@
 package project660;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,18 +24,10 @@ public class Menu
         int n = 0;
         
         while (!menuChoice.contains(n)) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
             System.out.print("\nMenu:\n1. Generate new graph");
             System.out.print("\n2. Analyze graph");
             System.out.print("\n3. Create small sample graph 'test'");
-            System.out.print("\n   Your choice?");
-            String line = in.readLine();
-            
-            try {
-                n = Integer.parseInt(line);
-            } catch (NumberFormatException e) {
-                System.out.print("\n   Please type a numeric value!\n");
-            }
+            n = Interactor.getInt("\n   Your choice?");
         }
         
         switch (n) {
