@@ -3,41 +3,35 @@ package project660;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Random;
-import java.util.Stack;
 
-public class Prj660 {
-	
-	final static boolean DIRECTED = true;
-	
-	public static void main(String[] args) throws Exception {
-		if (args.length == 0 || (!args[0].equals("generate") && !args[0].equals("analyze") && !args[0].equals("fake"))) {
-			System.out.println("Usage: <application> <key>");
-			System.out.println("key: generate - generate graphs");
-			System.out.println("     analyze - analyze graphs");
-			System.exit(0);
-		}
+public class Prj660 extends Menu
+{
+	public static void main(String[] args) throws Exception 
+	{
+		/**
+		 * Display the menu
+		 */
+		display();
 		
 		/**
 		 * for testing purposes
 		 */
-		if (args[0].equals("fake")) {
-			Graph g = new Graph(4, 0, DIRECTED);
+		if (choice == COMMAND_FAKE) {
+			Graph g = new Graph(4, 0, Generator.DIRECTED);
 			g.insert_vertex(4);
-			g.insert_edge(1, 2, DIRECTED);
-			g.insert_edge(2, 1, DIRECTED);
-			g.insert_edge(2, 3, DIRECTED);
-			g.insert_edge(3, 2, DIRECTED);
-			g.insert_edge(3, 4, DIRECTED);
-			g.insert_edge(4, 3, DIRECTED);
-			g.insert_edge(4, 1, DIRECTED);
-			g.insert_edge(1, 4, DIRECTED);
+			g.insert_edge(1, 2, Generator.DIRECTED);
+			g.insert_edge(2, 1, Generator.DIRECTED);
+			g.insert_edge(2, 3, Generator.DIRECTED);
+			g.insert_edge(3, 2, Generator.DIRECTED);
+			g.insert_edge(3, 4, Generator.DIRECTED);
+			g.insert_edge(4, 3, Generator.DIRECTED);
+			g.insert_edge(4, 1, Generator.DIRECTED);
+			g.insert_edge(1, 4, Generator.DIRECTED);
 			
-			FileOutputStream fout = new FileOutputStream("test");
+			FileOutputStream fout  = new FileOutputStream("test");
 			ObjectOutputStream oos = new ObjectOutputStream(fout);   
 			oos.writeObject(g);
 			oos.close();
@@ -46,48 +40,11 @@ public class Prj660 {
 		}
 		
 
-		if (args[0].equals("generate")) {
-			boolean another_graph = true;
-			while (another_graph) {	
-				BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
-				System.out.print("\nn=");
-				String line = in.readLine();
-				int n = Integer.parseInt(line);
-				System.out.print("p=");
-				line = in.readLine();
-				double p = Double.parseDouble(line);
-				Graph g = new Graph(n, p, DIRECTED);
-				Random rand = new Random();
-				g.insert_vertex(n);
-				for (int i = 1; i <= n; i++) {
-					for (int j = 1; j <= n; j++) {
-						if (i == j) continue;
-						double rnd = rand.nextDouble();
-						if (rnd <= p) {
-							g.insert_edge(i, j, DIRECTED);
-						}
-					}	
-				}
-				g.print_graph();
-				System.out.print("Filename to save this graph:");
-				line = in.readLine();
-				if (line.length() > 0) {
-					FileOutputStream fout = new FileOutputStream(line);
-					ObjectOutputStream oos = new ObjectOutputStream(fout);   
-					oos.writeObject(g);
-					oos.close();
-				}
-				System.out.print("Would you like to generate another graph? [y/N]:");
-				line = in.readLine();
-				if (line.length() > 0) {
-					if (line.charAt(0) == 'Y' || line.charAt(0) == 'y')
-						another_graph = true;
-					else another_graph = false;
-				} else another_graph = false;
-			} // while
+		if (choice == COMMAND_GENERATE) {
+			Generator.generate();
 		}
 		
-		if (args[0].equals("analyze")) {
+		if (choice == COMMAND_ANALYZE) {
 			boolean another_graph = true;
 			while (another_graph) {
 				BufferedReader _in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
@@ -149,4 +106,5 @@ public class Prj660 {
 		}
 		System.out.println("Done");
 	}
+	
 }
