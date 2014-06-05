@@ -1,8 +1,12 @@
 package project660;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Interactor 
 {
@@ -47,4 +51,20 @@ public class Interactor
         return n;
     }
     
+    public HashMap<String, String> getFiles(String path)
+    {
+        HashMap<String, String> m = new HashMap<String, String>();
+        
+        File folder = new File(path + "/data/");
+        File[] listOfFiles = folder.listFiles();
+
+            for (int i = 0; i < listOfFiles.length; i++) {
+              if (listOfFiles[i].isFile()) {
+                m.put(listOfFiles[i].getName(), listOfFiles[i].getAbsolutePath());
+              }
+            }
+        
+        return m;
+    }
+
 }
