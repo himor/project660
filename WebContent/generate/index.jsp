@@ -1,4 +1,4 @@
-<%@ include file="header.jsp" %>
+<%@ include file="../header.jsp" %>
 <%@page import="java.util.Map"%>
 <div class="content">
     <div class="filelist">
@@ -27,4 +27,4 @@
     
     </div>
 </div>
-<%@ include file="footer.jsp" %>
+<%@ include file="../footer.jsp" %>
