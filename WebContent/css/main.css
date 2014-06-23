@@ -1,8 +1,15 @@
 @CHARSET "UTF-8";
 
+html{
+    width:100%;
+    height:100%;
+}
+
 body {
 	font-family: 'Droid Sans', sans-serif;
-	margin: 0;
+    margin:0;
+    width:100%;
+    height:100%;
 	padding: 0;
 }
 
@@ -65,5 +72,32 @@ ul {
 }
 
 .filelist a {
-	margin-left:10px;
+}
+
+.filelist table {
+	width: 100%;
+}
+
+.filelist table th {
+	text-align: left;
+}
+
+.graphData {
+	width:200px;
+    float:left;
+	font-size:.8em;
+	margin-top:20px;
+}
+
+.graphVisual {
+	margin-left:210px;
+}
+
+.graphVisual canvas{
+    background:white;
+}
+
+.graphVisual > svg {
+    width: 800;
+    height: 600;
 }

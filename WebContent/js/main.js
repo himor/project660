@@ -2,8 +2,9 @@
  * Main.js
  */
 
-function load(filename)
+function loadInfo($filename)
 {
-	alert();
-
+	$.post(root + '/slave.jsp', {action:'loadInfo', filename: $filename}, function(data) {
+		$('div.info').empty().append('<h3>"' + $filename + '"</h3').append(data);
+	});	
 }

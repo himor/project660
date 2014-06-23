@@ -2,27 +2,39 @@
 <%@page import="java.util.Map"%>
 <div class="content">
     <div class="filelist">
-    <ul>
+    <table>
+    <thead>
+    <tr>
+    	<th>#</th>
+    	<th>Name</th>
+    	<th>Load</th>
+   	</tr>
+   	</thead>
+   	<tbody>
     <%
     Interactor i = new Interactor();
-    String path = request.getRealPath("/");
+    int counter  = 0;
     
-    for (Map.Entry<String, String> entry : i.getFiles(path).entrySet()) {
+    for (Map.Entry<String, FileInfo> entry : i.getFileList(config_.rootDir).entrySet()) {
+        out.print("<tr><td>" + (++counter) + "</td>");
         
-        out.print("<li>");
-        out.print("<a href=\"javascript:load('" + entry.getKey() + "');\">");
-        out.print(entry.getKey());
-        out.println("</a>");
-        out.print("</li>");
+        if (entry.getValue().getLocked()) {
+            out.print("<td>" + entry.getKey() + "</td>");
+            out.print("<td>locked</td>");
+        } else {            
+	        out.print("<td><a href=\"javascript:loadInfo('" + entry.getKey() + "')\">");
+	        out.print(entry.getKey());
+	        out.println("</a></td>");
+	        out.print("<td><a href=\"" + root + "/analyze/?graph=" + entry.getKey() + "\">...</a></td></tr>");
+        }
+        
     }
     
-    
-    
     %>
-    </ul>
+    </table>
     </div>
     <div class="info">
-    
+    <h3>Please select a file</h3>
     
     
     </div>

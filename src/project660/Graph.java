@@ -7,11 +7,11 @@ public class Graph implements Serializable
     private static final long serialVersionUID = 1L;
     
     Edgenode[] edges;                            /* adjacency info */
-    int[] indegree;                                 /* indegree of each vertex */
+    int[] indegree;                              /* indegree of each vertex */
     int[] outdegree;                             /* outdegree of each vertex */
-    int nvertices;                                 /* number of vertices in graph */
-    int nedges;                                 /* number of edges in graph */
-    Boolean directed;                             /* is the graph directed? */
+    int nvertices;                               /* number of vertices in graph */
+    int nedges;                                  /* number of edges in graph */
+    Boolean directed;                            /* is the graph directed? */
     public int pathLength;
     double probability;
     int[] parent;                                /* discovery relation */
@@ -39,7 +39,8 @@ public class Graph implements Serializable
     /**
      * Add single vertex
      */
-    public void insert_vertex() {
+    public void insert_vertex() 
+    {
         this.nvertices ++;
     }
     
@@ -48,7 +49,8 @@ public class Graph implements Serializable
      * 
      * @param int n
      */
-    public void insert_vertex(int n) {
+    public void insert_vertex(int n) 
+    {
         this.nvertices += n;
     }
     
@@ -65,7 +67,7 @@ public class Graph implements Serializable
         p.y        = y;
         p.next     = this.edges[x];
         
-        this.edges[x] = p;                 /* insert at head of list */
+        this.edges[x] = p;               /* insert at head of list */
         this.outdegree[x] ++;
         this.indegree[y] ++;
         
@@ -76,21 +78,29 @@ public class Graph implements Serializable
     }    
     
     /**
-     * Print basic information about the graph
+     * Returns basic information about the graph
+     * 
+     * @return String
      */
-    public void print_graph () {
-        System.out.print("G (E=" + this.nedges);
-        System.out.print(", N=" + this.nvertices + ") ");
-        System.out.println("p=" + this.probability);
-        System.out.println("np=" + (this.nvertices * this.probability));
+    public String print_graph () 
+    {
+    	String out = "";
+    	
+        out += "G (E=" + this.nedges;
+        out += ", N=" + this.nvertices + ") <br>";
+        out += "p=" + this.probability;
+        out += " np=" + (this.nvertices * this.probability);
+        
+        return out;
     }
     
     /**
      * Print full information about the graph
      * 
-     * @param Boolean t means nothing
+     * @param Boolean full means nothing
      */
-    public void print_graph(boolean t) {
+    public String print_graph(boolean full) 
+    {
         String s = "", 
                j = "";
         
@@ -98,21 +108,35 @@ public class Graph implements Serializable
         
         for (int i = 1; i <= this.nvertices; i++) {
             p = this.edges[i];
-            if (p == null) continue;
-            j += i + " -> ";
-            while (p != null) {
-                j += p.y + ", ";
-                p = p.next;
+            if (p == null) {
+                j += i + ", ";
+            } else {
+                j += i + " -> ";
+                while (p != null) {
+                    j += p.y + ", ";
+                    p = p.next;
+                }
             }
-            s += j.substring(0, j.length()-2) + "\n";
+            s += j.substring(0, j.length()-2) + "<br>";
             j = "";
         }
         
-        System.out.print("G (E=" + this.nedges);
-        System.out.print(", N=" + this.nvertices + ") ");
-        System.out.println("p=" + this.probability);
-        System.out.println("np=" + (this.nvertices * this.probability));
-        System.out.println(s);
+        return print_graph() + "<br>" + s;
+    }
+    
+    public int getNvertices()
+    {
+        return this.nvertices;
+    }
+    
+    public Edgenode getEdge(int n)
+    {
+        return this.edges[n];
+    }
+    
+    public Edgenode[] getEdge()
+    {
+        return this.edges;
     }
     
 }

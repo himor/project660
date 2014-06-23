@@ -6,6 +6,5 @@ Course project - generates random directed graphs and performs certain kinds of 
 4. the size of a largest strongly connected component,
 5. the number of directed cycles of length k.
 
-Usage:
-	analyze - analyze existing graph
-	generate - create the new graph using G(n,p)
+This is a visual implementation of the project.
+
