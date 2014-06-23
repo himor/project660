@@ -23,7 +23,7 @@ public class Cyclotron
      * 
      * @param size - size of cycles
      */
-    public void execute(int size) 
+    public String execute(int size) 
     {
         this.ncycles    = 0;
         this.cycle_size = size;
@@ -39,13 +39,13 @@ public class Cyclotron
             sniff (k, i, true);
         }
         
-        System.out.println("Number of cycles of size " + size + ": " + ncycles);
+        String output = "Number of cycles of size " + size + ": " + ncycles + "<br>";
         
         for (int i = 0; i < ncycles; i++) {
-            System.out.println(stack[i].toString());
+            output += stack[i].toString() + "<br>";
         }
         
-        System.out.println();
+       return output;
     }
     
     /**

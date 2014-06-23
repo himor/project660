@@ -13,8 +13,13 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Interactor 
+public class Interactor
 {
+    /**
+     * Size of max cycle
+     */
+    final int MAX_CYCLE = 10;
+    
     public static String getString(String message) throws IOException
     {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
@@ -208,6 +213,44 @@ public class Interactor
         }
         
         return g;
+    }
+    
+    public String getAnalisys(Graph g) throws Exception
+    {
+        String output = g.print_graph();
+        
+        // # of nodes with indegree/outdegree 0
+        int indegree_zero  = 0;
+        int outdegree_zero = 0;
+        
+        for (int i = 1; i <= g.nvertices; i++) {
+            if (g.indegree[i] == 0) 
+                indegree_zero++;
+            
+            if (g.outdegree[i] == 0) 
+                outdegree_zero++;
+        }
+        
+        output += "<br>Number of nodes with  in-degree = 0: " + (int) indegree_zero + " (" + ((double) indegree_zero / g.nvertices * 100) + "%)";
+        output += "<br>Number of nodes with out-degree = 0: " + (int) outdegree_zero + " (" + ((double) outdegree_zero / g.nvertices * 100) + "%)";
+
+        // size of a largest weakly connected component
+        Wcc wcc = new Wcc(g);
+        wcc.weak_components();
+        output += "<br>" + wcc.results();
+        
+        // size of a largest strongly connected component
+        Scc scc = new Scc(g);
+        scc.strong_components();
+        output += "<br>" + scc.results();
+        
+        // cycles
+        Cyclotron lhc = new Cyclotron(g);
+        for (int i = 2 ; i <= MAX_CYCLE; i ++)        // i = 2 .. 10
+            output += "<br>" + lhc.execute(i);
+        
+        
+        return output;
     }
     
     

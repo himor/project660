@@ -77,27 +77,28 @@ public class Wcc
     /**
      * Method processes weakly connected components for graph
      */
-    public void results() 
+    public String results() 
     {
-        int lines  = 0;
-        int[] size = new int[components_found + 1];
+        String output = "";
+        int lines     = 0;
+        int[] size    = new int[components_found + 1];
         
         for (int index = 1; index <= this.components_found; index++) {
             size[index] = 0;
             
             if (index <= lines)
-                System.out.print(index + ": ");
+                output += index + ": ";
             
             for (int jdex = 1; jdex <= graph.nvertices; jdex++){
                 if (wcc[jdex] == index) {
                     if (index <= lines)
-                        System.out.print(jdex+" ");
+                        output += jdex + " ";
                     size[index]++;
                 }
             }
             
             if (index <= lines)
-                System.out.println();
+                output += "<br>";
         }
         
         // Find largest weakly connected component
@@ -108,7 +109,8 @@ public class Wcc
                 max = size[index];
         }
         
-        System.out.println("Largest WCC: " + max);
+        output += "Largest WCC: " + max;
+        return output;
     }
     
     /**

@@ -6,15 +6,15 @@ public class Graph implements Serializable
 {
     private static final long serialVersionUID = 1L;
     
-    Edgenode[] edges;                            /* adjacency info */
-    int[] indegree;                              /* indegree of each vertex */
-    int[] outdegree;                             /* outdegree of each vertex */
-    int nvertices;                               /* number of vertices in graph */
-    int nedges;                                  /* number of edges in graph */
-    Boolean directed;                            /* is the graph directed? */
+    Edgenode[] edges;      /* adjacency info */
+    int[] indegree;        /* indegree of each vertex */
+    int[] outdegree;       /* outdegree of each vertex */
+    int nvertices;         /* number of vertices in graph */
+    int nedges;            /* number of edges in graph */
+    Boolean directed;      /* is the graph directed? */
     public int pathLength;
     double probability;
-    int[] parent;                                /* discovery relation */
+    int[] parent;          /* discovery relation */
     public int MAXV = 0;
     
     public Graph(int n, double p, Boolean directed) 
@@ -61,18 +61,18 @@ public class Graph implements Serializable
      * @param y
      * @param directed
      */
-    public void insert_edge (int x, int y, Boolean directed) 
+    public void insert_edge(int x, int y, Boolean directed) 
     {
-        Edgenode p = new Edgenode();     /* temporary pointer */
+        Edgenode p = new Edgenode(); /* temporary pointer */
         p.y        = y;
         p.next     = this.edges[x];
         
-        this.edges[x] = p;               /* insert at head of list */
+        this.edges[x] = p;           /* insert at head of list */
         this.outdegree[x] ++;
         this.indegree[y] ++;
         
         if (!directed)
-            insert_edge (y, x, true);
+            insert_edge(y, x, true);
         else
             this.nedges ++;
     }    
@@ -82,7 +82,7 @@ public class Graph implements Serializable
      * 
      * @return String
      */
-    public String print_graph () 
+    public String print_graph() 
     {
     	String out = "";
     	
@@ -124,19 +124,56 @@ public class Graph implements Serializable
         return print_graph() + "<br>" + s;
     }
     
+    /**
+     * Return the number of vertices
+     *  
+     * @return int
+     */
     public int getNvertices()
     {
         return this.nvertices;
     }
     
+    /**
+     * Get the edgenode
+     * 
+     * @param int n Edge number
+     * 
+     * @return Edgenode
+     */
     public Edgenode getEdge(int n)
     {
         return this.edges[n];
     }
     
+    /**
+     * Get all edgenodes 
+     * 
+     * @return array
+     */
     public Edgenode[] getEdge()
     {
         return this.edges;
+    }
+    
+    /**
+     * Get all indegrees
+     * 
+     * @return array
+     */
+    public int[] getIndegree()
+    {
+        return this.indegree;
+    }
+    
+    /**
+     * Get all outdegrees
+     * 
+     * @return array
+     */
+    public int[] getOutdegree()
+    {
+        return this.outdegree;
     }
     
 }

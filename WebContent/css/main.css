@@ -93,11 +93,18 @@ ul {
 	margin-left:210px;
 }
 
-.graphVisual canvas{
+.graphVisual canvas {
     background:white;
 }
 
 .graphVisual > svg {
     width: 800;
     height: 600;
+}
+
+.graphVisual .result {
+	height: 180px;
+	overflow-y: scroll;
+    font-family: 'Droid Sans Mono', ;
+    font-size: .8em;
 }

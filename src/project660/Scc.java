@@ -4,10 +4,10 @@ import java.util.Stack;
 
 public class Scc 
 {
-    private static final int CROSS      = 1;
+    private static final int CROSS   = 1;
     private static final int FORWARD = 2;
-    private static final int TREE      = 3;
-    private static final int BACK      = 4;
+    private static final int TREE    = 3;
+    private static final int BACK    = 4;
 
     Graph g;
     Stack<Integer> stack;
@@ -67,10 +67,11 @@ public class Scc
         
     }
     
-    public void results() 
+    public String results() 
     {
-        int lines = 0;
-        int max   = 0;
+        String output = "";
+        int lines     = 0;
+        int max       = 0;
 //        System.out.println("\nStrongly Connected Components:\nComponents found:" + this.components_found);
 //        System.out.println("First "+lines+" components displayed:");
         
@@ -80,19 +81,19 @@ public class Scc
             size[i] = 0;
             
             if (i <= lines) 
-                System.out.print(i + ": ");
+                output += i + ": ";
             
             for (int j = 1; j <= g.nvertices; j++) {
                 //System.out.println("scc["+j+"]="+scc[j]);
                 if (scc[j] == i) {
                     if (i <= lines) 
-                        System.out.print(j + " ");
+                        output += j + " ";
                     size[i] ++;
                 }
             }
             
             if (i <= lines) 
-                System.out.println();
+                output += "<br>";
         }
         
         for (int i = 1; i <= this.components_found; i++) {
@@ -100,14 +101,15 @@ public class Scc
                 max = size[i];
         }
         
-        System.out.println("Largest SCC: " + max);
+        output += "Largest SCC: " + max;
+        return output;
     }
     
     /**
      * DFS
      * @throws Exception 
      */
-    private void dfs (int v) throws Exception 
+    private void dfs(int v) throws Exception 
     {
         Edgenode p;     /* temporary pointer */
         int y;             /* successor vertex */

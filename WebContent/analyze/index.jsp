@@ -10,7 +10,7 @@
     %>
     
     <%
-    Interactor i    = new Interactor();
+    Interactor i = new Interactor();
     filename = config_.rootDir + config_.dataPath + graphName;
     graph_ = i.loadGraph(filename);
     if (graph_ == null) {
@@ -23,7 +23,10 @@
     </div>
     
     <div class="graphVisual" id="graphVisual">
-    <!-- <canvas id="viewport" width="800" height="600"></canvas> -->
+    <div class="result">
+    <%= i.getAnalisys(graph_) %>
+    </div>
+    <canvas id="viewport" width="800" height="600"></canvas>
     </div>
     <%        
     }   
@@ -62,11 +65,29 @@
 </div>
 <% if (loaded) {%>
 <script type="text/javascript">
-<%-- var sys = arbor.ParticleSystem(2600, 512, .5);
+var sys = arbor.ParticleSystem(2600, 512, .5);
 sys.parameters({gravity:true})
-sys.renderer = Renderer("#viewport") ;
-<% for (int i = 1; i <= graph_.getNvertices(); i++) { 
-    out.print("sys.addNode('node_" + i + "', {color: 'grey', shape: 'dot', label: '" + i + "'});\n");
+sys.renderer = Renderer("#viewport");
+<% 
+// compute max in/out degree
+int max_i = 0, 
+    max_o = 0;
+
+for (int i = 1; i <= graph_.getNvertices(); i++) {
+    if (max_i < graph_.getIndegree()[i])
+        max_i = graph_.getIndegree()[i];
+    if (max_o < graph_.getOutdegree()[i])
+        max_o = graph_.getOutdegree()[i];
+}
+
+max_i ++;
+max_o ++;
+
+for (int i = 1; i <= graph_.getNvertices(); i++) { 
+    int r = (0 + (255 / max_i * (graph_.getIndegree()[i] + 1)));
+    int g = (255 - (255 / max_o * (graph_.getIndegree()[i] + 1)));
+    int b = (255 - (255 / max_o * (graph_.getIndegree()[i] + 1)));
+    out.print("sys.addNode('node_" + i + "', {color: 'rgb(" + r + "," + g + "," + b + ")', shape: 'dot', label: '" + i + "'});\n");
 }
 
 Edgenode p = new Edgenode();
@@ -74,61 +95,11 @@ for (int i = 1; i <= graph_.getNvertices(); i++) {
     p = graph_.getEdge(i);
     if (p == null) continue;
     while (p != null) {
-        out.print("sys.addEdge('node_" + i + "', 'node_" + p.y + "', {type:\"arrow\", directed:true} );\n");
+        out.print("sys.addEdge('node_" + i + "', 'node_" + p.y + "', {type:\"arrow\", directed:true, color: '#333'} );\n");
         p = p.next;
     }
 }
-%> --%>
-
-function beginAddNodesLoop(graph){
-    graph.beginUpdate();
-
-    <% for (int i = 1; i <= graph_.getNvertices(); i++) { 
-        out.print("graph.addNode(" + i + ");\n");
-    }
-
-    Edgenode p = new Edgenode();
-    for (int i = 1; i <= graph_.getNvertices(); i++) {
-        p = graph_.getEdge(i);
-        if (p == null) continue;
-        while (p != null) {
-            out.print("graph.addLink(" + i + ", " + p.y + ");\n");
-            p = p.next;
-        }
-    }
-    %>
-    
-    graph.endUpdate();
-}
-
-var graph = Viva.Graph.graph();
-
-var layout = Viva.Graph.Layout.forceDirected(graph, {
-
-});
-
-var graphics = Viva.Graph.View.svgGraphics();
-graphics.node(function(node){
-   return Viva.Graph.svg('rect')
-      .attr('width', 15)
-      .attr('height', 15)
-      .attr('fill', node.data ? node.data : '#00a2e8');
-});
-
-var renderer = Viva.Graph.View.renderer(graph,
-    {
-        layout     : layout,
-        graphics   : graphics,
-        container  : document.getElementById('graphVisual'),
-        renderLinks : true
-    });
-
-renderer.run(50);
-
-beginAddNodesLoop(graph);
-
-l = layout;
-		
+%>
 
 </script>
 <%} %>
