@@ -71,6 +71,20 @@ ul {
 	margin-left:320px;
 }
 
+.info .generator {
+	border-top: 1px solid #000;
+	padding: 5px 0px;
+}
+
+.info .generator form label {
+	display:inline-block;
+	width:20%;
+}
+
+.info .generator form input[type="submit"] {
+    margin-left:20%;
+}
+
 .filelist a {
 }
 

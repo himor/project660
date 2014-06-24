@@ -13,6 +13,11 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Contains handy functions for interacting with front end
+ * 
+ * @author m.gordo <himor.cre@gmail.com>
+ */
 public class Interactor
 {
     /**
@@ -20,6 +25,9 @@ public class Interactor
      */
     final int MAX_CYCLE = 10;
     
+    /**
+     * @deprecated
+     */
     public static String getString(String message) throws IOException
     {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
@@ -27,6 +35,9 @@ public class Interactor
         return in.readLine();
     }
     
+    /**
+     * @deprecated
+     */
     public static int getInt(String message) throws IOException
     {
         int n = -1;
@@ -44,6 +55,9 @@ public class Interactor
         return n;
     }
     
+    /**
+     * @deprecated
+     */
     public static double getDouble(String message) throws IOException
     {
         double n = -1;
@@ -63,7 +77,7 @@ public class Interactor
     
     /**
      * Load file list from the directory
-     *  
+     * @deprecated
      * @param String path Directory to parse
      * 
      * @return HashMap<String, String>
@@ -184,6 +198,29 @@ public class Interactor
     }
     
     /**
+     * Check filelist exists
+     * 
+     * @param FileInfo fi FileInfo
+     * 
+     * @throws IOException
+     */
+    public Boolean checkFileList(String root, String name) throws IOException
+    {
+        HashMap<String, FileInfo> m = getFileList(root);
+        FileOutputStream fout  = new FileOutputStream(root + "filelist.txt");
+        ObjectOutputStream oos = new ObjectOutputStream(fout);
+        Boolean result = false;
+        
+        for (Map.Entry<String, FileInfo> entry : m.entrySet()) {
+            if (entry.getKey().equals(name))
+               result = true;
+        }
+
+        oos.close();
+        return result;
+    }
+    
+    /**
      * Graph loader
      * 
      * @param String filename File name
@@ -215,6 +252,13 @@ public class Interactor
         return g;
     }
     
+    /**
+     * Returns graph analisys results as a string
+     * 
+     * @param Graph g Graph
+     * @return String
+     * @throws Exception
+     */
     public String getAnalisys(Graph g) throws Exception
     {
         String output = g.print_graph();
@@ -223,16 +267,16 @@ public class Interactor
         int indegree_zero  = 0;
         int outdegree_zero = 0;
         
-        for (int i = 1; i <= g.nvertices; i++) {
-            if (g.indegree[i] == 0) 
+        for (int i = 1; i <= g.getNvertices(); i++) {
+            if (g.getIndegree()[i] == 0) 
                 indegree_zero++;
             
-            if (g.outdegree[i] == 0) 
+            if (g.getOutdegree()[i] == 0) 
                 outdegree_zero++;
         }
         
-        output += "<br>Number of nodes with  in-degree = 0: " + (int) indegree_zero + " (" + ((double) indegree_zero / g.nvertices * 100) + "%)";
-        output += "<br>Number of nodes with out-degree = 0: " + (int) outdegree_zero + " (" + ((double) outdegree_zero / g.nvertices * 100) + "%)";
+        output += "<br>Number of nodes with zero  in-degree: " + (int) indegree_zero + " (" + ((double) indegree_zero / g.getNvertices() * 100) + "%)";
+        output += "<br>Number of nodes with zero out-degree: " + (int) outdegree_zero + " (" + ((double) outdegree_zero / g.getNvertices() * 100) + "%)";
 
         // size of a largest weakly connected component
         Wcc wcc = new Wcc(g);
@@ -244,11 +288,10 @@ public class Interactor
         scc.strong_components();
         output += "<br>" + scc.results();
         
-        // cycles
+        // searching for cycles
         Cyclotron lhc = new Cyclotron(g);
-        for (int i = 2 ; i <= MAX_CYCLE; i ++)        // i = 2 .. 10
+        for (int i = 2; i <= MAX_CYCLE; i ++)
             output += "<br>" + lhc.execute(i);
-        
         
         return output;
     }

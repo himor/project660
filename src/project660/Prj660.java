@@ -21,7 +21,7 @@ public class Prj660 extends Menu
         display();
         
         if (choice == COMMAND_GENERATE) {
-            Generator.generate();
+            //Generator.generate();
         }
         
         if (choice == COMMAND_ANALYZE) {

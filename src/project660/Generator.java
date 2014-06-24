@@ -3,53 +3,17 @@ package project660;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Date;
 import java.util.Random;
 
-public class Generator 
+public class Generator implements Runnable
 {
     final static boolean DIRECTED = true;
     
-    /**
-     * Generate new graph
-     * 
-     * @throws IOException
-     */
-    public static void generate() throws IOException
-    {
-        boolean another_graph = true;
+    public Pair   pair;
+    public String name;
+    public String path;
         
-        while (another_graph) {
-            Pair pair = new Pair();
-            pair      = getNP();
-            Graph g   = getGraph(pair);
-            
-            g.print_graph();
-            saveGraph(g);
-            
-            String line = Interactor.getString("Would you like to generate another graph? [y/N]:");
-            
-            if (line.length() > 0) {
-                if (line.charAt(0) == 'Y' || line.charAt(0) == 'y')
-                    another_graph = true;
-                else another_graph = false;
-            } else another_graph = false;
-        }
-    }
-    
-    /**
-     * Get NP parameters
-     * 
-     * @return Pair
-     * @throws IOException
-     */
-    private static Pair getNP() throws IOException
-    {
-        int n    = Interactor.getInt("\nn=");
-        double p = Interactor.getDouble("\np=");
-        
-        return new Pair(n,p);
-    }
-    
     /**
      * Build the graph
      * 
@@ -84,15 +48,45 @@ public class Generator
      * @param g
      * @throws IOException
      */
-    private static void saveGraph(Graph g) throws IOException
+    private void saveGraph(Graph g) throws IOException
     {
-        String line = Interactor.getString("Filename to save this graph [ENTER - don't save]:");
+        FileOutputStream fout  = new FileOutputStream(path + Config.getInstance().dataPath + name);
+        ObjectOutputStream oos = new ObjectOutputStream(fout);   
+        oos.writeObject(g);
+        oos.close();
         
-        if (line.length() > 0) {
-            FileOutputStream fout  = new FileOutputStream(line);
-            ObjectOutputStream oos = new ObjectOutputStream(fout);   
-            oos.writeObject(g);
-            oos.close();
+        FileInfo fi = new FileInfo();
+        fi.setDate(new Date());
+        fi.setFilename(name);
+        fi.setFilepath(path + Config.getInstance().dataPath);
+        fi.setLocked(false);
+        fi.setReport(g.print_graph());
+        
+        Interactor i = new Interactor();
+        i.updateFileList(path, fi);
+    }
+
+    @Override
+    public void run() 
+    {
+        FileInfo fi = new FileInfo();
+        fi.setDate(new Date());
+        fi.setFilename(name);
+        fi.setFilepath(path + Config.getInstance().dataPath);
+        fi.setLocked(true);
+        
+        Interactor i = new Interactor();
+        try {
+            i.addToFileList(path, fi);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        Graph g = getGraph(pair);
+        try {
+            saveGraph(g);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     

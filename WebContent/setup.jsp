@@ -4,7 +4,7 @@
 
 <%
     Config config_ = Config.getInstance();
-    String root = config_.rootUrl; 
-    String url  = request.getRequestURI();
+    String root    = config_.rootUrl; 
+    String url     = request.getRequestURI();
     config_.setRootDir("C:\\temp");
 %>

@@ -34,9 +34,27 @@
     </table>
     </div>
     <div class="info">
-    <h3>Please select a file</h3>
-    
-    
+        <div class="infoData">
+	       <h3>Please select a file...</h3>
+	    </div>
+	    <div class="generator">
+	       <h3>Generate new graph</h3>
+	       <form action="<%= root %>/slave.jsp" method="post">
+		       <input type="hidden" name="action" value="generate">
+		       <label>N = </label>
+		       <input type="text" name="nvalue" required="required">
+		       <br />
+		       <label>P = </label>
+		       <input type="text" name="pvalue" required="required">
+		       <br />
+		       <label>Name </label>
+               <input type="text" name="name" required="required">
+               <br />
+               <input type="submit" value="Start">
+		       <small>Generation of large graphs cat take hours...</small>
+	       </form>
+	       
+	    </div>  
     </div>
 </div>
 <%@ include file="../footer.jsp" %>
