@@ -17,6 +17,14 @@ h1, h2, h3 {
 	font-weight: normal;
 }
 
+h3.success {
+	color: green;
+}
+
+h3.fail {
+	color: red;
+}
+
 .header,
 .footer {
 	padding: 5px 0px;
@@ -35,6 +43,10 @@ h1, h2, h3 {
     margin: 0px auto 0px auto;
 }
 
+.content {
+	margin-top:15px;
+}
+
 ul {
 	list-style-type: none;
 	padding: 0;
@@ -50,6 +62,8 @@ ul {
 	background-color: #000;
 	color: #fff;
 	text-decoration: none;
+	display: block;
+	min-width: 100px;
 }
 
 .menu a:hover {
@@ -67,6 +81,11 @@ ul {
 	float:left;
 }
 
+.filelist200 {
+    width:200px;
+    float:left;
+}
+
 .info {
 	margin-left:320px;
 }
@@ -74,15 +93,21 @@ ul {
 .info .generator {
 	border-top: 1px solid #000;
 	padding: 5px 0px;
+	margin-top: 5px;
 }
 
-.info .generator form label {
+form {
+	margin:0;
+	padding:0;
+}
+
+.generator form label {
 	display:inline-block;
-	width:20%;
+	width:18%;
 }
 
-.info .generator form input[type="submit"] {
-    margin-left:20%;
+.generator form  br + input[type="submit"] {
+    margin-left:19%;
 }
 
 .filelist a {
@@ -104,7 +129,8 @@ ul {
 }
 
 .graphVisual {
-	margin-left:210px;
+	padding: 0px;
+	margin-left: 210px;
 }
 
 .graphVisual canvas {

@@ -23,7 +23,7 @@ public class Interactor
     /**
      * Size of max cycle
      */
-    final int MAX_CYCLE = 10;
+    final int MAX_CYCLE = 5;
     
     /**
      * @deprecated
@@ -113,19 +113,20 @@ public class Interactor
             FileInputStream streamIn = new FileInputStream(root + "filelist.txt");
             objectinputstream = new ObjectInputStream(streamIn);
             FileInfo readCase = null;
-            do{
+            do {
                 readCase = (FileInfo) objectinputstream.readObject();
-                if(readCase != null){
+                if (readCase != null) {
                     m.put(readCase.getFilename(), readCase);
                 }
+
             }
             while (readCase != null);
             
         } catch (Exception e) {
-            
+            e.printStackTrace();
         } finally {
-            if(objectinputstream != null){
-                objectinputstream .close();
+            if (objectinputstream != null) {
+                objectinputstream.close();
             } 
         }
         return m;    	
@@ -135,7 +136,6 @@ public class Interactor
      * Add another graph info to filelist
      * 
      * @param FileInfo fi FileInfo
-     * 
      * @throws IOException
      */
     public void addToFileList(String root, FileInfo fi) throws IOException
@@ -207,8 +207,6 @@ public class Interactor
     public Boolean checkFileList(String root, String name) throws IOException
     {
         HashMap<String, FileInfo> m = getFileList(root);
-        FileOutputStream fout  = new FileOutputStream(root + "filelist.txt");
-        ObjectOutputStream oos = new ObjectOutputStream(fout);
         Boolean result = false;
         
         for (Map.Entry<String, FileInfo> entry : m.entrySet()) {
@@ -216,7 +214,6 @@ public class Interactor
                result = true;
         }
 
-        oos.close();
         return result;
     }
     
@@ -287,11 +284,12 @@ public class Interactor
         Scc scc = new Scc(g);
         scc.strong_components();
         output += "<br>" + scc.results();
+        output += "<br>";
         
         // searching for cycles
         Cyclotron lhc = new Cyclotron(g);
         for (int i = 2; i <= MAX_CYCLE; i ++)
-            output += "<br>" + lhc.execute(i);
+            output += "" + lhc.execute(i);
         
         return output;
     }

@@ -29,7 +29,7 @@ public class Cyclotron
         this.cycle_size = size;
         Edgenode p;
         
-        stack = new Cycle[g.nvertices * 10];
+        stack = new Cycle[(g.nvertices > g.nedges ? g.nvertices : g.nedges) * 10];
         // NOTE: the size of ^stack^ array should be increased for dense graphs
         
         for (int i = 1; i <= g.nvertices; i++) {

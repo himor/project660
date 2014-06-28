@@ -22,9 +22,9 @@ public class Graph implements Serializable
         this.MAXV     = n;
         this.directed = directed;
         
-        edges     = new Edgenode[MAXV+1];
-        outdegree = new int[MAXV+1];
-        indegree  = new int[MAXV+1];
+        edges     = new Edgenode[MAXV + 1];
+        outdegree = new int[MAXV + 1];
+        indegree  = new int[MAXV + 1];
         
         for (int i = 1; i <= MAXV; i++)  {
             this.indegree[i]  = 0;
@@ -41,7 +41,101 @@ public class Graph implements Serializable
      */
     public void insert_vertex() 
     {
-        this.nvertices ++;
+        nvertices ++;
+    }
+    
+    /**
+     * Add vertex to the existing graph
+     */
+    public void addVertex()
+    {
+        nvertices ++;
+        MAXV = nvertices;
+        reinitArrays();
+    }
+    
+    /**
+     * Remove vertex from the existing graph
+     * 
+     * @param int n Vertex id
+     */
+    public void removeVertex(int n)
+    {
+        Edgenode p    = null;
+        Edgenode last = null;
+        
+        for (int i = 1; i <= this.nvertices; i++) {
+            if (n == i) {
+                // remove outgoing edges
+                this.edges[i] = null;
+                continue;
+            }
+            last = null;
+            p    = this.edges[i];
+            // remove incoming edges
+            while (p != null) {
+                if (p.y == n) {
+                    if (last == null) 
+                        edges[i] = p.next;
+                    else
+                        last.next = p.next;
+                }
+                last = p;
+                p = p.next;
+            }
+        }
+        
+        // rename edges
+        for (int i = n + 1; i <= this.nvertices; i++) {
+            edges[i - 1] = edges[i];
+        }
+        nvertices --;
+        MAXV = nvertices;
+        reinitArrays();
+        for (int i = 1; i <= this.nvertices; i++) {
+            p = edges[i];
+            while (p != null) {
+                if (p.y > n)
+                    p.y --;
+                p = p.next;
+            }
+        }
+        
+        // re-count in/out degrees
+        for (int i = 1; i <= this.nvertices; i++) {
+            outdegree[i] = 0;
+            indegree[i]  = 0;
+        }
+        for (int i = 1; i <= this.nvertices; i++) {
+            p = edges[i];
+            if (p == null)
+                outdegree[i] = 0;
+            else {
+                while (p != null) {
+                    outdegree[i] ++;
+                    indegree[p.y] ++;
+                    p = p.next;
+                }
+            }
+        }
+    }
+    
+    /**
+     * Reinitialize arrays
+     */
+    private void reinitArrays()
+    {
+        Edgenode[] newedges = new Edgenode[edges.length + 1];
+        System.arraycopy(edges, 0, newedges, 0, edges.length);
+        edges = newedges;
+        
+        int[] newindegree = new int[indegree.length + 1];
+        System.arraycopy(indegree, 0, newindegree, 0, indegree.length);
+        indegree = newindegree;
+        
+        int[] newoutdegree = new int[outdegree.length + 1];
+        System.arraycopy(outdegree, 0, newoutdegree, 0, outdegree.length);
+        outdegree = newoutdegree;
     }
     
     /**

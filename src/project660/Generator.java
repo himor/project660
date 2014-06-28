@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Generator implements Runnable
 {
-    final static boolean DIRECTED = true;
+    final public static boolean DIRECTED = true;
     
     public Pair   pair;
     public String name;
@@ -48,7 +48,7 @@ public class Generator implements Runnable
      * @param g
      * @throws IOException
      */
-    private void saveGraph(Graph g) throws IOException
+    public void saveGraph(Graph g) throws IOException
     {
         FileOutputStream fout  = new FileOutputStream(path + Config.getInstance().dataPath + name);
         ObjectOutputStream oos = new ObjectOutputStream(fout);   
@@ -60,6 +60,25 @@ public class Generator implements Runnable
         fi.setFilename(name);
         fi.setFilepath(path + Config.getInstance().dataPath);
         fi.setLocked(false);
+        fi.setReport(g.print_graph());
+        
+        Interactor i = new Interactor();
+        i.updateFileList(path, fi);
+    }
+    
+    /**
+     * Lock graph
+     * 
+     * @param g
+     * @throws IOException
+     */
+    public void lockGraph(Graph g) throws IOException
+    {
+        FileInfo fi = new FileInfo();
+        fi.setDate(new Date());
+        fi.setFilename(name);
+        fi.setFilepath(path + Config.getInstance().dataPath);
+        fi.setLocked(true);
         fi.setReport(g.print_graph());
         
         Interactor i = new Interactor();

@@ -18,7 +18,7 @@
 <%-- <script type="text/javascript" src="<%= root %>/js/vivagraph.js"></script> --%>
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Generation and Properties of Large Directed Erdös-Renyi Model Random Graphs</title>
+<title>Generation and Properties of Directed Erdös-Renyi Model Random Graphs</title>
 <script type="text/javascript">
 	var root = "<%= root%>";
 </script>
@@ -26,12 +26,13 @@
 <body>
 
 <div class="header">
-    <h2>Generation and Properties of Large Directed Erdös-Renyi Model Random Graphs</h2>
+    <h2>Generation and Properties of Directed Erdös-Renyi Model Random Graphs</h2>
 </div>
 
 <div class="menu">
     <ul>
 	    <li><a <% out.print(url.contains("generate") ? "class='active'" : "");%> href="<%= root %>/generate/">Generate</a></li>
 	    <li><a <% out.print(url.contains("analyze") ? "class='active'" : "");%> href="<%= root %>/analyze/">Analyze</a></li>
+	    <li><a <% out.print(url.contains("builder") ? "class='active'" : "");%> href="<%= root %>/builder/">Editor</a></li>
     </ul>
 </div>
