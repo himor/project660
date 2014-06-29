@@ -22,42 +22,23 @@
     %>
     
 <div class="content">
-    <div class="filelist200">
-    <table>
-    <thead>
-    <tr>
-    	<th>#</th>
-    	<th>Name</th>
-   	</tr>
-   	</thead>
-   	<tbody>
-    <%
-    Interactor in = new Interactor();
-    int counter  = 0;
-    
-    for (Map.Entry<String, FileInfo> entry : in.getFileList(config_.rootDir).entrySet()) {
-        out.print("<tr><td>" + (++counter) + "</td>");
-        
-        if (entry.getValue().getLocked()) {
-            out.print("<td>" + entry.getKey() + "[");
-            out.print("locked]</td>");
-        } else {            
-	        out.print("<td><a href=\"" + root + "/builder/?graph=" + entry.getKey() + "\">");
-	        out.print(entry.getKey());
-	        out.println("</a></td>");
-	        out.print("</tr>");
-        }
-        
-    }
-        
-    %>
-    </table>
-    </div>
+
+    <% if (!loaded)  {%>
+	    <div class="fulltable">
+	    <%@ include file="../table.jsp" %>
+	    </div>
+    <% } else { %>
+	    <div class="shorttable nowidth">
+	    <% tableSize = 2; %>
+	    <%@ include file="../table.jsp" %>
+	    </div>
+    <% } %>  
+
     <div class="builder">
 	    <div class="generator">
 	    <% String success = request.getParameter("success");
-	    String fail_    = request.getParameter("fail");
-	    int fail        = 0;
+	    String fail_      = request.getParameter("fail");
+	    int fail          = 0;
 	    
 	    if (fail_ != null)
 	        fail = Integer.parseInt(fail_);
@@ -72,32 +53,58 @@
         }
 	    %>
 
-	       <h3>Build a graph</h3>
 	       <% if (!loaded)  {%>
-	       
+	       <h3>Build a graph</h3>
            <form action="<%= root %>/slave.jsp" method="post">
                <input type="hidden" name="action" value="build">
-               <label>Name</label>
-               <input type="text" name="name" required="required"><br />
-               <label>N = </label>
-               <input type="text" name="nvalue" required="required"><br />
+               <label class="l50">Name</label>
+               <input type="text" name="name" class="i170" required="required"><br />
+               <label class="l50">N = </label>
+               <input type="text" class="i60" name="nvalue" required="required">
                <input type="submit" value="Build">
            </form>
 	       
 	       <% } else { %>
-	       <form action="<%= root %>/slave.jsp" method="post">
-		       <input type="hidden" name="action" value="insertNode">
-		       <input type="hidden" name="name" value="<%= graphName %>">
-		       <input type="submit" value="Insert node">
-		   </form>
+	       <h3 class="strong">Edit graph</h3>
+	       <div class="editor-blocks">
+	           <div class="form">
+                   <form action="<%= root %>/slave.jsp" method="post">
+                   <input type="hidden" name="action" value="insertNode">
+                   <input type="hidden" name="name" value="<%= graphName %>">
+                   <label>Insert node(s)</label>
+                   <input type="number" name="nvalue" value="1" required="required" placeholder="Number of nodes">
+                   <input type="submit" value="Insert node">
+                   </form>
+	           </div>
+	           <div class="form">
+		           <form action="<%= root %>/slave.jsp" method="post">
+	               <input type="hidden" name="action" value="removeNode">
+	               <input type="hidden" name="name" value="<%= graphName %>">
+	               <label>Remove node</label>
+	               <input type="number" name="nvalue" required="required" placeholder="Node id">
+	               <input type="submit" value="Remove node">
+	               </form>
+	           </div>
+	           <div class="form">
+	               <form action="<%= root %>/slave.jsp" method="post">
+	               <input type="hidden" name="action" value="insertEdge">
+	               <input type="hidden" name="name" value="<%= graphName %>">
+	               <label>Insert edge</label>
+	               <input type="number" name="from" required="required" placeholder="From"><br />
+	               <input type="number" name="to" required="required" placeholder="To"><br />
+	               <input type="submit" value="Insert edge">
+	               </form>
+	           </div>
+	           <div class="form">
+	           
+	           </div>
+	           <div class="clear"></div>
+	       </div>
+	       
+	       
+	       
+		   <%--
 		   
-		   <form action="<%= root %>/slave.jsp" method="post">
-               <input type="hidden" name="action" value="removeNode">
-               <input type="hidden" name="name" value="<%= graphName %>">
-                <label>Node</label>
-               <input type="number" name="nvalue" required="required">
-               <input type="submit" value="Remove node">
-           </form>
 		   
 		   <form action="<%= root %>/slave.jsp" method="post">
                <input type="hidden" name="action" value="insertEdge">
@@ -108,14 +115,20 @@
                <input type="number" name="to" required="required"><br />  
                <input type="submit" value="Insert edge">
            </form>
+            --%>
+           
            <% } %>
 	    </div>
 	    
-	    <div class="graphVisual" id="graphVisual">
-	    <canvas id="viewport" width="800" height="600"></canvas>
-	    </div>
-	    
     </div>
+    
+    <% if (loaded)  {%>
+        <div class="graphVisual" id="graphVisual">
+        <canvas id="viewport" width="1020" height="600"></canvas>
+        </div>
+    <% } %>
+    
+    
 </div>
 
 <% if (loaded) {%>

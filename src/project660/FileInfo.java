@@ -1,6 +1,7 @@
 package project660;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -57,6 +58,11 @@ public class FileInfo implements Serializable
 
     public Date getDate() {
         return date;
+    }
+    
+    public String getFormattedDate(String format) {
+        SimpleDateFormat dt1 = new SimpleDateFormat(format);
+        return dt1.format(date);
     }
 
     public void setDate(Date date) {

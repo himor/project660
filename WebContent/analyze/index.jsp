@@ -1,66 +1,54 @@
 <%@ include file="../header.jsp" %>
 <%@page import="java.util.Map"%>
 <div class="content">
+
+    <%-- Loading the graph if specified --%>
     <%
-    Boolean loaded = false;
+    Boolean loaded   = false;
     String graphName = request.getParameter("graph");
     String filename;
     Graph graph_ = null;
     if (graphName != null) {
-    %>
-    
-    <%
-    Interactor i = new Interactor();
-    filename = config_.rootDir + config_.dataPath + graphName;
-    graph_ = i.loadGraph(filename);
-    if (graph_ == null) {
-        out.print("Unable to load the graph " + filename );
-    } else {
-        loaded = true;
-    %>
-    <div class="graphData">
-    <% out.print(graph_.print_graph(true)); %>
-    </div>
-    
-    <div class="graphVisual" id="graphVisual">
-    <div class="result">
-    <%= i.getAnalisys(graph_) %>
-    </div>
-    <canvas id="viewport" width="800" height="600"></canvas>
-    </div>
-    <%        
-    }   
-    %>
+	    Interactor i = new Interactor();
+	    filename     = config_.rootDir + config_.dataPath + graphName;
+	    graph_       = i.loadGraph(filename);
+	    if (graph_ == null) {
+	        out.print("Unable to load the graph " + filename );
+	    } else {
+	        loaded = true;
+		    %>
+		    <div class="graphData">
+		    <% out.print(graph_.print_graph(true)); %>
+		    </div>
+		    
+		    <div class="shorttable">
+		    <% tableSize = 2; %>
+		    <%@ include file="../table.jsp" %>
+		    </div>
+
+		    <div class="result">
+		    <%= i.getAnalisys(graph_) %>
+		    </div>
+		    
+		    <div class="graphVisual" id="graphVisual">
+		    <canvas id="viewport" width="800" height="600"></canvas>
+		    </div>
+		    <%        
+	    }   
+	    %>
     <% }
     if (graphName == null ) {
     %>
-    <div class="filelist">
-    <table>
-    <thead>
-    <tr>
-        <th>#</th>
-        <th>Name</th>
-    </tr>
-    </thead>
-    <tbody>
-    <%
-    Interactor i = new Interactor();
-    int counter  = 0;
-    for (Map.Entry<String, FileInfo> entry : i.getFileList(config_.rootDir).entrySet()) {
-        if (entry.getValue().getLocked())
-            continue;
-        
-        out.print("<tr><td>" + (++counter) + "</td>");
-        out.print("<td><a href=\"" + root + "/analyze/?graph=" + entry.getKey() + "\">");
-        out.print(entry.getKey());
-        out.println("</a></td>");
-    }
-    %>
-    </table>
+    
+    <div class="fulltable">
+    <%@ include file="../table.jsp" %>
     </div>
     <div class="info">
-    <h3>Please select a file</h3>
-    </div> 
+        <div class="infoData">
+            <h3>Please select a file...</h3>
+        </div>
+    </div>
+     
     <%} %>
 </div>
 <% if (loaded) {%>

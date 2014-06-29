@@ -47,11 +47,11 @@ public class Graph implements Serializable
     /**
      * Add vertex to the existing graph
      */
-    public void addVertex()
+    public void addVertex(int n)
     {
-        nvertices ++;
+        insert_vertex(n);
         MAXV = nvertices;
-        reinitArrays();
+        reinitArrays(n);
     }
     
     /**
@@ -123,17 +123,17 @@ public class Graph implements Serializable
     /**
      * Reinitialize arrays
      */
-    private void reinitArrays()
+    private void reinitArrays(int n)
     {
-        Edgenode[] newedges = new Edgenode[edges.length + 1];
+        Edgenode[] newedges = new Edgenode[edges.length + n];
         System.arraycopy(edges, 0, newedges, 0, edges.length);
         edges = newedges;
         
-        int[] newindegree = new int[indegree.length + 1];
+        int[] newindegree = new int[indegree.length + n];
         System.arraycopy(indegree, 0, newindegree, 0, indegree.length);
         indegree = newindegree;
         
-        int[] newoutdegree = new int[outdegree.length + 1];
+        int[] newoutdegree = new int[outdegree.length + n];
         System.arraycopy(outdegree, 0, newoutdegree, 0, outdegree.length);
         outdegree = newoutdegree;
     }

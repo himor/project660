@@ -1,15 +1,15 @@
 @CHARSET "UTF-8";
 
 html{
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
 }
 
 body {
 	font-family: 'Droid Sans', sans-serif;
-    margin:0;
-    width:100%;
-    height:100%;
+    margin: 0;
+    width: 100%;
+    height: 100%;
 	padding: 0;
 }
 
@@ -25,14 +25,12 @@ h3.fail {
 	color: red;
 }
 
-.header,
-.footer {
-	padding: 5px 0px;
-	border-bottom: 1px solid #000;
+.header {
+	border-bottom: 1px solid #aaa;
 }
 
 .footer {
-	clear:both;
+	clear: both;
 }
 
 .menu,
@@ -44,7 +42,7 @@ h3.fail {
 }
 
 .content {
-	margin-top:15px;
+	padding-top: 5px;
 }
 
 ul {
@@ -57,57 +55,103 @@ ul {
 	display: inline-block;
 }
 
+input[type="submit"],
+input[type="button"],
+button,
 .menu a {
 	padding: 5px 10px;
-	background-color: #000;
-	color: #fff;
+	background-color: #64adec;
+	color: #000;
 	text-decoration: none;
-	display: block;
+	display: inline-block;
 	min-width: 100px;
+	border: 0;
+	text-align: left;
 }
 
+input[type="submit"]:hover,
+input[type="button"]:hover,
+button:hover,
+.menu a.active,
 .menu a:hover {
-    background-color: #333;
-    color: #ff0;
+    background-color: #428bca;
+    color: #fff;
 }
 
-.menu a.active {
-	background-color: #333;
-    color: #f00;
+.menu a.active,
+.strong {
+	font-weight: bold;
 }
+
+/* FILELIST */
 
 .filelist {
-	width:300px;
-	float:left;
+	width: 300px;
+	float: left;
 }
 
-.filelist200 {
-    width:200px;
-    float:left;
+.tableSize .filelist {
+    width: 200px;
+    float: left;
 }
+
+/* INFO BLOCK */
 
 .info {
 	margin-left:320px;
 }
 
-.info .generator {
-	border-top: 1px solid #000;
-	padding: 5px 0px;
-	margin-top: 5px;
+.info div.infoData {
+	border-left: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	min-height: 80px;
+	padding: 0px 10px;
 }
+
+div.generator {
+	border-left: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    padding: 0px 10px;
+    font-size: 90%;
+}
+
+.builder {
+	margin-left: 320px;
+}
+
+/* FORMS */
 
 form {
 	margin:0;
 	padding:0;
 }
 
-.generator form label {
-	display:inline-block;
-	width:18%;
+label {
+	text-align: right;
+	margin-right: 3px;
 }
 
-.generator form  br + input[type="submit"] {
-    margin-left:19%;
+label.l50 {
+	display: inline-block;
+	width: 50px;
+}
+
+input {
+	margin: 3px;
+}
+
+input.i60 {
+	width: 60px;
+}
+
+input.i170 {
+	width: 170px;
+}
+
+input[type="submit"],
+input[type="button"],
+button {
+	margin: 3px;
 }
 
 .filelist a {
@@ -121,20 +165,40 @@ form {
 	text-align: left;
 }
 
+/* FULL LIST OF NODES */
+
 .graphData {
-	width:200px;
-    float:left;
-	font-size:.8em;
-	margin-top:20px;
+	width: 150px;
+    float: right;
+	font-size: .85em;
+}
+
+.shorttable {
+	overflow-y: scroll;
+	height: 180px;
+	width: 40%;
+	float: left;
+	font-size: .9em;
+}
+
+.result {
+    font-family: 'Droid Sans Mono', ;
+    font-size: .85em;
+    width: 40%;
+    float: left;
+    margin-left: 10px;
 }
 
 .graphVisual {
 	padding: 0px;
-	margin-left: 210px;
+	margin-right: 10px;
 }
 
 .graphVisual canvas {
-    background:white;
+    background: #eee;
+    border-radius: 10px;
+    border: 1px dotted #64adec;
+    margin-top: 5px;
 }
 
 .graphVisual > svg {
@@ -142,9 +206,40 @@ form {
     height: 600;
 }
 
-.graphVisual .result {
-	height: 180px;
-	overflow-y: scroll;
-    font-family: 'Droid Sans Mono', ;
-    font-size: .8em;
+.glyphicon {
+	padding-left: 10px;
+}
+
+.nowidth {
+	width: auto;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+
+.editor-blocks .form {
+	width: 24%;
+	float: left;
+	border-left: 1px solid #ccc;
+	padding-left: 3px;
+	height: 120px;
+}
+
+.editor-blocks .form:FIRST-CHILD {
+	border-width: 0px;
+    padding-left: 0px;
+}
+
+.clear {
+	clear: both;
 }

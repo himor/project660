@@ -10,8 +10,10 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Contains handy functions for interacting with front end
@@ -101,12 +103,14 @@ public class Interactor
     /**
      * Load file list from filelist file
      * 
-     * @return HashMap<String, FileInfo>
+     * @return Map<String, FileInfo>
      * @throws IOException 
      */
-    public HashMap<String, FileInfo> getFileList(String root) throws IOException
+    public Map<String, FileInfo> getFileList(String root) throws IOException
     {
-        HashMap<String, FileInfo> m = new HashMap<String, FileInfo>();
+        Map<String, FileInfo> m = new HashMap<String, FileInfo>();
+        MapComparator mpc       = new MapComparator(m);
+        Map<String, FileInfo> r = new TreeMap<String, FileInfo>(mpc);
                 
         ObjectInputStream objectinputstream = null;
         try {
@@ -129,7 +133,9 @@ public class Interactor
                 objectinputstream.close();
             } 
         }
-        return m;    	
+        
+        r.putAll(m);    
+        return r;    	
     }
     
     /**
@@ -140,7 +146,7 @@ public class Interactor
      */
     public void addToFileList(String root, FileInfo fi) throws IOException
     {
-        HashMap<String, FileInfo> m = getFileList(root);
+        Map<String, FileInfo> m = getFileList(root);
         
         FileOutputStream fout  = new FileOutputStream(root + "filelist.txt");
         ObjectOutputStream oos = new ObjectOutputStream(fout);
@@ -162,7 +168,7 @@ public class Interactor
      */
     public void removeFromFileList(String root, FileInfo fi) throws IOException
     {
-        HashMap<String, FileInfo> m = getFileList(root);
+        Map<String, FileInfo> m = getFileList(root);
         FileOutputStream fout  = new FileOutputStream(root + "filelist.txt");
         ObjectOutputStream oos = new ObjectOutputStream(fout);
         
@@ -183,7 +189,7 @@ public class Interactor
      */
     public void updateFileList(String root, FileInfo fi) throws IOException
     {
-        HashMap<String, FileInfo> m = getFileList(root);
+        Map<String, FileInfo> m = getFileList(root);
         FileOutputStream fout  = new FileOutputStream(root + "filelist.txt");
         ObjectOutputStream oos = new ObjectOutputStream(fout);
         
@@ -206,7 +212,7 @@ public class Interactor
      */
     public Boolean checkFileList(String root, String name) throws IOException
     {
-        HashMap<String, FileInfo> m = getFileList(root);
+        Map<String, FileInfo> m = getFileList(root);
         Boolean result = false;
         
         for (Map.Entry<String, FileInfo> entry : m.entrySet()) {

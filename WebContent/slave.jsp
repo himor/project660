@@ -134,11 +134,16 @@
        * insertNode
        */
        if (action.equals("insertNode")) {
-           String name  = request.getParameter("name");
-           if (name == null) {
+           String name = request.getParameter("name");
+           String n_   = request.getParameter("nvalue");
+           if (name == null || n_ == null) {
                response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=1&graph=" + name);
                return;
            }
+           
+           int n = Integer.parseInt(n_);
+           n     = n > 1 ? n : 1; 
+
            Interactor i = new Interactor();
            Generator g  = new Generator();
            
@@ -151,7 +156,7 @@
                response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=4&graph=" + name);
            }
            g.lockGraph(graph_);
-           graph_.addVertex();
+           graph_.addVertex(n);
            g.saveGraph(graph_);
            
            response.sendRedirect(Config.getInstance().rootUrl + "/builder/?graph=" + name);
