@@ -1,8 +1,10 @@
+<%@ page trimDirectiveWhitespaces="true" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="project660.*" %>
 <%@ include file="setup.jsp" %>
-
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
 <%
 	String action = request.getParameter("action");
 	if (action == null || action.equals(""))
@@ -134,33 +136,50 @@
        * insertNode
        */
        if (action.equals("insertNode")) {
-           String name = request.getParameter("name");
-           String n_   = request.getParameter("nvalue");
-           if (name == null || n_ == null) {
-               response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=1&graph=" + name);
+           String form[] = request.getParameterValues("form[]");
+           response.setContentType("application/json");
+           Interactor i = new Interactor();
+           Map<String, String> map = new HashMap<String, String>();
+           
+           if (form == null || form.length != 3) {
+               map.put("error", "1");
+               out.print(i.getJson(map));
+               return;
+           } else {
+               String name = form[1];
+               String n_   = form[2];
+               
+               if (name == null || n_ == null) {
+                   map.put("error", "1");
+                   out.print(i.getJson(map));
+                   return;
+               }
+
+               int n = Integer.parseInt(n_);
+               n     = n > 1 ? n : 1;
+               
+               Generator g  = new Generator();
+               
+               g.name = name;
+               g.path = path;
+               
+               String filename = config_.rootDir + config_.dataPath + name;
+               Graph graph_ = i.loadGraph(filename);
+               if (graph_ == null) {
+                   map.put("error", "1");
+                   out.print(i.getJson(map));
+                   return;
+               }
+               g.lockGraph(graph_);
+               graph_.addVertex(n);
+               g.saveGraph(graph_);
+               
+               map.put("error", "0");
+               map.put("count", "" + n);
+               map.put("total", "" + graph_.getNvertices());
+               out.print(i.getJson(map));
                return;
            }
-           
-           int n = Integer.parseInt(n_);
-           n     = n > 1 ? n : 1; 
-
-           Interactor i = new Interactor();
-           Generator g  = new Generator();
-           
-           g.name = name;
-           g.path = path;
-           
-           String filename = config_.rootDir + config_.dataPath + name;
-           Graph graph_ = i.loadGraph(filename);
-           if (graph_ == null) {
-               response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=4&graph=" + name);
-           }
-           g.lockGraph(graph_);
-           graph_.addVertex(n);
-           g.saveGraph(graph_);
-           
-           response.sendRedirect(Config.getInstance().rootUrl + "/builder/?graph=" + name);
-           return;
        }
       
        /**

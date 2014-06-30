@@ -12,35 +12,35 @@ import java.util.Date;
 public class FileInfo implements Serializable
 {
     private static final long serialVersionUID = 1L;
-	
-	protected String filename;
-	protected String filepath;
-	protected Date date;
-	protected Boolean locked;
-	protected String report;
-	protected String fullreport;
-	
-	public FileInfo()
-	{
-		this.filename   = "";
-		this.filepath   = "";
-		this.date       = new Date();
-		this.locked     = false;
-		this.report     = "";
-		this.fullreport = "";
-	}
-	
-	public void loadFileInfo(FileInfo fi)
-	{
-		this.filename   = fi.filename;
-		this.filepath   = fi.filepath;
-		this.date       = fi.date;
-		this.locked     = fi.locked;
-		this.report     = fi.report;
-		this.fullreport = fi.fullreport;
-	}
 
-	public String getFilename() {
+    protected String filename;
+    protected String filepath;
+    protected Date date;
+    protected Boolean locked;
+    protected String report;
+    protected String fullreport;
+
+    public FileInfo()
+    {
+        this.filename   = "";
+        this.filepath   = "";
+        this.date       = new Date();
+        this.locked     = false;
+        this.report     = "";
+        this.fullreport = "";
+    }
+
+    public void loadFileInfo(FileInfo fi)
+    {
+        this.filename   = fi.filename;
+        this.filepath   = fi.filepath;
+        this.date       = fi.date;
+        this.locked     = fi.locked;
+        this.report     = fi.report;
+        this.fullreport = fi.fullreport;
+    }
+
+    public String getFilename() {
         return filename;
     }
 
@@ -59,7 +59,7 @@ public class FileInfo implements Serializable
     public Date getDate() {
         return date;
     }
-    
+
     public String getFormattedDate(String format) {
         SimpleDateFormat dt1 = new SimpleDateFormat(format);
         return dt1.format(date);
@@ -92,5 +92,5 @@ public class FileInfo implements Serializable
     public void setFullreport(String fullreport) {
         this.fullreport = fullreport;
     }
-    
+
 }

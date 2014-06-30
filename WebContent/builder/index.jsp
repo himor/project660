@@ -1,5 +1,5 @@
 <%@ include file="../header.jsp" %>
-<%@page import="java.util.Map"%>
+<%@ page import="java.util.Map" %>
 
 <%
     Boolean loaded = false;
@@ -67,7 +67,7 @@
 	       <% } else { %>
 	       <h3 class="strong">Edit graph</h3>
 	       <div class="editor-blocks">
-	           <div class="form">
+	           <div class="form insertNode">
                    <form action="<%= root %>/slave.jsp" method="post">
                    <input type="hidden" name="action" value="insertNode">
                    <input type="hidden" name="name" value="<%= graphName %>">

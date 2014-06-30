@@ -26,24 +26,26 @@ public class Interactor
      * Size of max cycle
      */
     final int MAX_CYCLE = 5;
-    
+
     /**
      * @deprecated
      */
+    @Deprecated
     public static String getString(String message) throws IOException
     {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
         System.out.print(message);
         return in.readLine();
     }
-    
+
     /**
      * @deprecated
      */
+    @Deprecated
     public static int getInt(String message) throws IOException
     {
         int n = -1;
-        
+
         while (n < 0) {
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
             System.out.print(message);
@@ -53,17 +55,18 @@ public class Interactor
                 System.out.print("\n   Please type a numeric value!\n");
             }
         }
-        
+
         return n;
     }
-    
+
     /**
      * @deprecated
      */
+    @Deprecated
     public static double getDouble(String message) throws IOException
     {
         double n = -1;
-        
+
         while (n < 0) {
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
             System.out.print(message);
@@ -73,10 +76,10 @@ public class Interactor
                 System.out.print("\n   Please type a numeric value!\n");
             }
         }
-        
+
         return n;
     }
-    
+
     /**
      * Load file list from the directory
      * @deprecated
@@ -84,34 +87,35 @@ public class Interactor
      * 
      * @return HashMap<String, String>
      */
+    @Deprecated
     public HashMap<String, String> getFiles(String path)
     {
         HashMap<String, String> m = new HashMap<String, String>();
-        
+
         File folder = new File(path + "/data/");
         File[] listOfFiles = folder.listFiles();
 
-            for (int i = 0; i < listOfFiles.length; i++) {
-              if (listOfFiles[i].isFile()) {
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (listOfFiles[i].isFile()) {
                 m.put(listOfFiles[i].getName(), listOfFiles[i].getAbsolutePath());
-              }
             }
-        
+        }
+
         return m;
     }
-    
+
     /**
      * Load file list from filelist file
      * 
      * @return Map<String, FileInfo>
-     * @throws IOException 
+     * @throws IOException
      */
     public Map<String, FileInfo> getFileList(String root) throws IOException
     {
         Map<String, FileInfo> m = new HashMap<String, FileInfo>();
         MapComparator mpc       = new MapComparator(m);
         Map<String, FileInfo> r = new TreeMap<String, FileInfo>(mpc);
-                
+
         ObjectInputStream objectinputstream = null;
         try {
             FileInputStream streamIn = new FileInputStream(root + "filelist.txt");
@@ -125,19 +129,19 @@ public class Interactor
 
             }
             while (readCase != null);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (objectinputstream != null) {
                 objectinputstream.close();
-            } 
+            }
         }
-        
-        r.putAll(m);    
-        return r;    	
+
+        r.putAll(m);
+        return r;
     }
-    
+
     /**
      * Add another graph info to filelist
      * 
@@ -147,18 +151,18 @@ public class Interactor
     public void addToFileList(String root, FileInfo fi) throws IOException
     {
         Map<String, FileInfo> m = getFileList(root);
-        
+
         FileOutputStream fout  = new FileOutputStream(root + "filelist.txt");
         ObjectOutputStream oos = new ObjectOutputStream(fout);
-        
+
         for (Map.Entry<String, FileInfo> entry : m.entrySet()) {
-            oos.writeObject(entry.getValue());            
+            oos.writeObject(entry.getValue());
         }
-        
+
         oos.writeObject(fi);
         oos.close();
     }
-    
+
     /**
      * Delete graph info from filelist
      * 
@@ -171,15 +175,15 @@ public class Interactor
         Map<String, FileInfo> m = getFileList(root);
         FileOutputStream fout  = new FileOutputStream(root + "filelist.txt");
         ObjectOutputStream oos = new ObjectOutputStream(fout);
-        
+
         for (Map.Entry<String, FileInfo> entry : m.entrySet()) {
             if (!entry.getKey().equals(fi.getFilename()))
-                oos.writeObject(entry.getValue());            
+                oos.writeObject(entry.getValue());
         }
 
         oos.close();
     }
-    
+
     /**
      * Update graph info from filelist
      * 
@@ -192,7 +196,7 @@ public class Interactor
         Map<String, FileInfo> m = getFileList(root);
         FileOutputStream fout  = new FileOutputStream(root + "filelist.txt");
         ObjectOutputStream oos = new ObjectOutputStream(fout);
-        
+
         for (Map.Entry<String, FileInfo> entry : m.entrySet()) {
             if (!entry.getKey().equals(fi.getFilename()))
                 oos.writeObject(entry.getValue());
@@ -202,7 +206,7 @@ public class Interactor
 
         oos.close();
     }
-    
+
     /**
      * Check filelist exists
      * 
@@ -214,15 +218,15 @@ public class Interactor
     {
         Map<String, FileInfo> m = getFileList(root);
         Boolean result = false;
-        
+
         for (Map.Entry<String, FileInfo> entry : m.entrySet()) {
             if (entry.getKey().equals(name))
-               result = true;
+                result = true;
         }
 
         return result;
     }
-    
+
     /**
      * Graph loader
      * 
@@ -234,27 +238,27 @@ public class Interactor
      */
     public Graph loadGraph(String filename) throws IOException, ClassNotFoundException
     {
-    	/**
+        /**
          * Load graph object from the file
          */
         ObjectInputStream ois = null;
         Graph g = null;
         FileInputStream fin;
-        
+
         try {
             fin = new FileInputStream(filename);
-            ois = new ObjectInputStream(fin);   
+            ois = new ObjectInputStream(fin);
             g   = (Graph) ois.readObject();
         } catch (FileNotFoundException e) {
-            
+
         } finally {
             if (ois != null)
-            	ois.close();
+                ois.close();
         }
-        
+
         return g;
     }
-    
+
     /**
      * Returns graph analisys results as a string
      * 
@@ -265,41 +269,62 @@ public class Interactor
     public String getAnalisys(Graph g) throws Exception
     {
         String output = g.print_graph();
-        
+
         // # of nodes with indegree/outdegree 0
         int indegree_zero  = 0;
         int outdegree_zero = 0;
-        
+
         for (int i = 1; i <= g.getNvertices(); i++) {
-            if (g.getIndegree()[i] == 0) 
+            if (g.getIndegree()[i] == 0)
                 indegree_zero++;
-            
-            if (g.getOutdegree()[i] == 0) 
+
+            if (g.getOutdegree()[i] == 0)
                 outdegree_zero++;
         }
-        
-        output += "<br>Number of nodes with zero  in-degree: " + (int) indegree_zero + " (" + ((double) indegree_zero / g.getNvertices() * 100) + "%)";
-        output += "<br>Number of nodes with zero out-degree: " + (int) outdegree_zero + " (" + ((double) outdegree_zero / g.getNvertices() * 100) + "%)";
+
+        output += "<br>Number of nodes with zero  in-degree: " + indegree_zero + " (" + ((double) indegree_zero / g.getNvertices() * 100) + "%)";
+        output += "<br>Number of nodes with zero out-degree: " + outdegree_zero + " (" + ((double) outdegree_zero / g.getNvertices() * 100) + "%)";
 
         // size of a largest weakly connected component
         Wcc wcc = new Wcc(g);
         wcc.weak_components();
         output += "<br>" + wcc.results();
-        
+
         // size of a largest strongly connected component
         Scc scc = new Scc(g);
         scc.strong_components();
         output += "<br>" + scc.results();
         output += "<br>";
-        
+
         // searching for cycles
         Cyclotron lhc = new Cyclotron(g);
         for (int i = 2; i <= MAX_CYCLE; i ++)
             output += "" + lhc.execute(i);
-        
+
         return output;
     }
-    
-    
-    
+
+    /**
+     * Returns json object
+     * 
+     * @param map
+     * 
+     * @return String
+     */
+    public String getJson(Map <String, String> map)
+    {
+        String result = "";
+
+        for (Map.Entry<String, String> entry: map.entrySet()) {
+            result += "\"" + entry.getKey() + "\":\"" + entry.getValue() + "\",";
+        }
+
+        if (result.length() > 0)
+            result = result.substring(0, result.length() - 1);
+
+        return "{" + result + "}";
+    }
+
+
+
 }

@@ -33,6 +33,28 @@ function updateTable()
 		setInterval(function(){updateTable()}, 10000);
 	}
 	
+	/**
+	 * Insert node
+	 */
+	$('.form.insertNode form').on('submit', function(event) {
+		event.preventDefault();
+		
+		var fields = new Array();
+		var values = new Array();
+
+		fields = $(this).children(":input").serializeArray();
+		$.each(fields, function(index,element){
+			values.push(element.value);
+		});
+		
+		$.post(root + '/slave.jsp', {action:'insertNode', form:values}, function(data) {
+			if (data.error == 0) {
+				var count = data.count;
+				for (_i = count - 1; _i >= 0; _i--)
+					sys.addNode('node_' + (data.total - _i), {color: 'grey', shape: 'dot', label: (data.total - _i)});
+			}
+		});
+	});
 	
 	
 	
