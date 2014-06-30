@@ -215,6 +215,42 @@
              response.sendRedirect(Config.getInstance().rootUrl + "/builder/?graph=" + name);
              return;
          }
+        
+         /**
+          * removeEdge
+          */
+          if (action.equals("removeEdge")) {
+              String from_ = request.getParameter("from");
+              String to_   = request.getParameter("to");
+              String name  = request.getParameter("name");
+              if (from_ == null || to_ == null || name == null) {
+                  response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=1&graph=" + name);
+                  return;
+              }
+              int from = Integer.parseInt(from_);
+              int to   = Integer.parseInt(to_);
+              if (from <= 0 || to <= 0) {
+                  response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=2&graph=" + name);
+                  return;
+              }
+              Interactor i = new Interactor();
+              Generator g  = new Generator();
+              
+              g.name = name;
+              g.path = path;
+              
+              String filename = config_.rootDir + config_.dataPath + name;
+              Graph graph_ = i.loadGraph(filename);
+              if (graph_ == null) {
+                  response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=4&graph=" + name);
+              }
+              g.lockGraph(graph_);
+              graph_.remove_edge(from, to, g.DIRECTED);
+              g.saveGraph(graph_);
+              
+              response.sendRedirect(Config.getInstance().rootUrl + "/builder/?graph=" + name);
+              return;
+          }
 	
 	
 %>

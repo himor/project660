@@ -96,7 +96,14 @@
 	               </form>
 	           </div>
 	           <div class="form">
-	           
+	               <form action="<%= root %>/slave.jsp" method="post">
+                   <input type="hidden" name="action" value="removeEdge">
+                   <input type="hidden" name="name" value="<%= graphName %>">
+                   <label>Remove edge</label>
+                   <input type="number" name="from" required="required" placeholder="From"><br />
+                   <input type="number" name="to" required="required" placeholder="To"><br />
+                   <input type="submit" value="Remove edge">
+                   </form>
 	           </div>
 	           <div class="clear"></div>
 	       </div>
@@ -163,7 +170,7 @@ for (int i = 1; i <= graph_.getNvertices(); i++) {
     p = graph_.getEdge(i);
     if (p == null) continue;
     while (p != null) {
-        out.print("sys.addEdge('node_" + i + "', 'node_" + p.y + "', {type:\"arrow\", directed:true, color: '#333'} );\n");
+        out.print("var edge_" + i +"_" + p.y + " = sys.addEdge('node_" + i + "', 'node_" + p.y + "', {type:\"arrow\", directed:true, color: '#333'} );\n");
         p = p.next;
     }
 }

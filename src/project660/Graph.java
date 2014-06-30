@@ -91,7 +91,7 @@ public class Graph implements Serializable
         }
         nvertices --;
         MAXV = nvertices;
-        reinitArrays();
+        reinitArrays(nvertices);
         for (int i = 1; i <= this.nvertices; i++) {
             p = edges[i];
             while (p != null) {
@@ -169,7 +169,55 @@ public class Graph implements Serializable
             insert_edge(y, x, true);
         else
             this.nedges ++;
-    }    
+    }
+    
+    /**
+     * Remove edge
+     * 
+     * @param int n Vertex id
+     */
+    public void remove_edge(int x, int y, Boolean directed)
+    {
+        Edgenode p    = null;
+        Edgenode last = null;
+        
+        for (int i = 1; i <= this.nvertices; i++) {
+            if (x != i)
+                continue;
+            
+            last = null;
+            p    = this.edges[i];
+            // remove incoming edges
+            while (p != null) {
+                if (p.y == y) {
+                    if (last == null) 
+                        edges[i] = p.next;
+                    else
+                        last.next = p.next;
+                }
+                last = p;
+                p = p.next;
+            }
+        }
+        
+        // re-count in/out degrees
+        for (int i = 1; i <= this.nvertices; i++) {
+            outdegree[i] = 0;
+            indegree[i]  = 0;
+        }
+        for (int i = 1; i <= this.nvertices; i++) {
+            p = edges[i];
+            if (p == null)
+                outdegree[i] = 0;
+            else {
+                while (p != null) {
+                    outdegree[i] ++;
+                    indegree[p.y] ++;
+                    p = p.next;
+                }
+            }
+        }
+    }
     
     /**
      * Returns basic information about the graph
