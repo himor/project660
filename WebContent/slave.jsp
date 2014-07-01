@@ -12,6 +12,8 @@
 	
 	String path = Config.getInstance().rootDir;
 	
+	Map<String, String> map = new HashMap<String, String>();
+	
 	/**
 	 * Load info
 	 */
@@ -97,50 +99,30 @@
      }
     
      /**
-      * insertEdge
+      * deleteGraph
       */
-      if (action.equals("insertEdge")) {
-          String from_ = request.getParameter("from");
-          String to_   = request.getParameter("to");
+      if (action.equals("deleteGraph")) {
           String name  = request.getParameter("name");
-          if (from_ == null || to_ == null || name == null) {
+          if (name == null) {
               response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=1&graph=" + name);
               return;
           }
-          int from = Integer.parseInt(from_);
-          int to   = Integer.parseInt(to_);
-          if (from <= 0 || to <= 0) {
-              response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=2&graph=" + name);
-              return;
-          }
           Interactor i = new Interactor();
-          Generator g  = new Generator();
+          FileInfo fi  = new FileInfo();
+          fi.setFilename(name);
+          i.removeFromFileList(path, fi);
           
-          g.name = name;
-          g.path = path;
-          
-          String filename = config_.rootDir + config_.dataPath + name;
-          Graph graph_ = i.loadGraph(filename);
-          if (graph_ == null) {
-              response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=4&graph=" + name);
-          }
-          g.lockGraph(graph_);
-          graph_.insert_edge(from, to, g.DIRECTED);
-          g.saveGraph(graph_);
-          
-          response.sendRedirect(Config.getInstance().rootUrl + "/builder/?graph=" + name);
+          response.sendRedirect(Config.getInstance().rootUrl + "/builder/");
           return;
       }
      
       /**
-       * insertNode
+       * insertNode - AJAX
        */
        if (action.equals("insertNode")) {
            String form[] = request.getParameterValues("form[]");
            response.setContentType("application/json");
            Interactor i = new Interactor();
-           Map<String, String> map = new HashMap<String, String>();
-           
            if (form == null || form.length != 3) {
                map.put("error", "1");
                out.print(i.getJson(map));
@@ -148,21 +130,16 @@
            } else {
                String name = form[1];
                String n_   = form[2];
-               
                if (name == null || n_ == null) {
                    map.put("error", "1");
                    out.print(i.getJson(map));
                    return;
                }
-
                int n = Integer.parseInt(n_);
                n     = n > 1 ? n : 1;
-               
                Generator g  = new Generator();
-               
                g.name = name;
                g.path = path;
-               
                String filename = config_.rootDir + config_.dataPath + name;
                Graph graph_ = i.loadGraph(filename);
                if (graph_ == null) {
@@ -173,7 +150,6 @@
                g.lockGraph(graph_);
                graph_.addVertex(n);
                g.saveGraph(graph_);
-               
                map.put("error", "0");
                map.put("count", "" + n);
                map.put("total", "" + graph_.getNvertices());
@@ -182,58 +158,93 @@
            }
        }
       
-       /**
-        * deleteGraph
-        */
-        if (action.equals("deleteGraph")) {
-            String name  = request.getParameter("name");
-            if (name == null) {
-                response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=1&graph=" + name);
-                return;
-            }
-            Interactor i = new Interactor();
-            FileInfo fi  = new FileInfo();
-            fi.setFilename(name);
-            i.removeFromFileList(path, fi);
-            
-            response.sendRedirect(Config.getInstance().rootUrl + "/builder/");
-            return;
-        }
-       
         /**
-         * removeNode
+         * removeNode - AJAX
          */
          if (action.equals("removeNode")) {
-             String name = request.getParameter("name");
-             String n_   = request.getParameter("nvalue");
-             if (name == null || n_ == null) {
-                 response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=1&graph=" + name);
-                 return;
-             }
-             int n = Integer.parseInt(n_);
-             if (n <= 0) {
-                 response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=2&graph=" + name);
-                 return;
-             }
-             
+             String form[] = request.getParameterValues("form[]");
+             response.setContentType("application/json");
              Interactor i = new Interactor();
-             Generator g  = new Generator();
-             
-             g.name = name;
-             g.path = path;
-             
-             String filename = config_.rootDir + config_.dataPath + name;
-             Graph graph_ = i.loadGraph(filename);
-             if (graph_ == null) {
-                 response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=4&graph=" + name);
+             if (form == null || form.length != 3) {
+                 map.put("error", "1");
+                 out.print(i.getJson(map));
+                 return;
+             } else {
+                 String name = form[1];
+                 String n_   = form[2];
+                 if (name == null || n_ == null) {
+                     map.put("error", "1");
+                     out.print(i.getJson(map));
+                     return;
+                 }
+                 int n        = Integer.parseInt(n_);
+                 Generator g  = new Generator();
+                 g.name = name;
+                 g.path = path;
+                 String filename = config_.rootDir + config_.dataPath + name;
+                 Graph graph_ = i.loadGraph(filename);
+                 if (graph_ == null) {
+                     map.put("error", "1");
+                     out.print(i.getJson(map));
+                     return;
+                 }
+                 g.lockGraph(graph_);
+                 graph_.removeVertex(n);
+                 g.saveGraph(graph_);
+                 map.put("error", "0");
+                 map.put("id", "" + n);
+                 out.print(i.getJson(map));
+                 return;
              }
-             g.lockGraph(graph_);
-             graph_.removeVertex(n);
-             g.saveGraph(graph_);
-             
-             response.sendRedirect(Config.getInstance().rootUrl + "/builder/?graph=" + name);
-             return;
          }
+         
+         /**
+          * insertEdge - AJAX
+          */
+         if (action.equals("insertEdge")) {
+             String form[] = request.getParameterValues("form[]");
+             response.setContentType("application/json");
+             Interactor i = new Interactor();
+             if (form == null || form.length != 4) {
+                 map.put("error", "1");
+                 out.print(i.getJson(map));
+                 return;
+             } else {
+	             String name  = form[1];
+	             String from_ = form[2];
+	             String to_   = form[3];
+	             if (from_ == null || to_ == null || name == null) {
+	                 map.put("error", "1");
+	                 out.print(i.getJson(map));
+	                 return;
+	             }
+	             int from = Integer.parseInt(from_);
+	             int to   = Integer.parseInt(to_);
+	             if (from <= 0 || to <= 0) {
+	                 map.put("error", "1");
+                     out.print(i.getJson(map));
+                     return;
+	             }
+	             Generator g  = new Generator();
+	             g.name = name;
+	             g.path = path;
+	             String filename = config_.rootDir + config_.dataPath + name;
+	             Graph graph_ = i.loadGraph(filename);
+	             if (graph_ == null) {
+	                 map.put("error", "1");
+	                 out.print(i.getJson(map));
+	                 return;
+	             }
+	             g.lockGraph(graph_);
+	             graph_.insert_edge(from, to, g.DIRECTED);
+	             g.saveGraph(graph_);
+	             map.put("error", "0");
+                 map.put("from", "" + from);
+                 map.put("to", "" + to);
+                 out.print(i.getJson(map));
+                 return;
+              }
+          }
         
          /**
           * removeEdge

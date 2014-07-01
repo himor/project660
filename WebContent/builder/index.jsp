@@ -76,7 +76,7 @@
                    <input type="submit" value="Insert node">
                    </form>
 	           </div>
-	           <div class="form">
+	           <div class="form removeNode">
 		           <form action="<%= root %>/slave.jsp" method="post">
 	               <input type="hidden" name="action" value="removeNode">
 	               <input type="hidden" name="name" value="<%= graphName %>">
@@ -85,7 +85,7 @@
 	               <input type="submit" value="Remove node">
 	               </form>
 	           </div>
-	           <div class="form">
+	           <div class="form insertEdge">
 	               <form action="<%= root %>/slave.jsp" method="post">
 	               <input type="hidden" name="action" value="insertEdge">
 	               <input type="hidden" name="name" value="<%= graphName %>">
@@ -95,7 +95,7 @@
 	               <input type="submit" value="Insert edge">
 	               </form>
 	           </div>
-	           <div class="form">
+	           <div class="form removeEdge">
 	               <form action="<%= root %>/slave.jsp" method="post">
                    <input type="hidden" name="action" value="removeEdge">
                    <input type="hidden" name="name" value="<%= graphName %>">
@@ -107,22 +107,6 @@
 	           </div>
 	           <div class="clear"></div>
 	       </div>
-	       
-	       
-	       
-		   <%--
-		   
-		   
-		   <form action="<%= root %>/slave.jsp" method="post">
-               <input type="hidden" name="action" value="insertEdge">
-               <input type="hidden" name="name" value="<%= graphName %>">
-               <label>From</label>
-               <input type="number" name="from" required="required"><br />
-               <label>To</label>
-               <input type="number" name="to" required="required"><br />  
-               <input type="submit" value="Insert edge">
-           </form>
-            --%>
            
            <% } %>
 	    </div>
@@ -170,7 +154,7 @@ for (int i = 1; i <= graph_.getNvertices(); i++) {
     p = graph_.getEdge(i);
     if (p == null) continue;
     while (p != null) {
-        out.print("var edge_" + i +"_" + p.y + " = sys.addEdge('node_" + i + "', 'node_" + p.y + "', {type:\"arrow\", directed:true, color: '#333'} );\n");
+        out.print("window.edge_" + i +"_" + p.y + " = sys.addEdge('node_" + i + "', 'node_" + p.y + "', {type:\"arrow\", directed:true, color: '#333'} );\n");
         p = p.next;
     }
 }
