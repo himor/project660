@@ -89,7 +89,7 @@ function getInputs(object)
 			if (data.error == 0) {
 				var from = data.from,
 					to   = data.to;
-				eval("windows.edge_" + from + "_" + to + " = sys.addEdge('node_" + from + "', 'node_" + to + "', {type:\"arrow\", directed:true, color: '#333'} );\n");
+				eval("window.edge_" + from + "_" + to + " = sys.addEdge('node_" + from + "', 'node_" + to + "', {type:\"arrow\", directed:true, color: '#333'} );\n");
 			}
 		});
 	});
