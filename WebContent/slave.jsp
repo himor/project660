@@ -247,40 +247,51 @@
           }
         
          /**
-          * removeEdge
+          * removeEdge - AJAX
           */
           if (action.equals("removeEdge")) {
-              String from_ = request.getParameter("from");
-              String to_   = request.getParameter("to");
-              String name  = request.getParameter("name");
-              if (from_ == null || to_ == null || name == null) {
-                  response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=1&graph=" + name);
-                  return;
-              }
-              int from = Integer.parseInt(from_);
-              int to   = Integer.parseInt(to_);
-              if (from <= 0 || to <= 0) {
-                  response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=2&graph=" + name);
-                  return;
-              }
+              String form[] = request.getParameterValues("form[]");
+              response.setContentType("application/json");
               Interactor i = new Interactor();
-              Generator g  = new Generator();
-              
-              g.name = name;
-              g.path = path;
-              
-              String filename = config_.rootDir + config_.dataPath + name;
-              Graph graph_ = i.loadGraph(filename);
-              if (graph_ == null) {
-                  response.sendRedirect(Config.getInstance().rootUrl + "/builder/?fail=4&graph=" + name);
-              }
-              g.lockGraph(graph_);
-              graph_.remove_edge(from, to, g.DIRECTED);
-              g.saveGraph(graph_);
-              
-              response.sendRedirect(Config.getInstance().rootUrl + "/builder/?graph=" + name);
-              return;
+              if (form == null || form.length != 4) {
+                  map.put("error", "1");
+                  out.print(i.getJson(map));
+                  return;
+              } else {
+                  String name  = form[1];
+                  String from_ = form[2];
+                  String to_   = form[3];
+                  if (from_ == null || to_ == null || name == null) {
+                      map.put("error", "1");
+                      out.print(i.getJson(map));
+                      return;
+                  }
+                  int from = Integer.parseInt(from_);
+                  int to   = Integer.parseInt(to_);
+                  if (from <= 0 || to <= 0) {
+                      map.put("error", "1");
+                      out.print(i.getJson(map));
+                      return;
+                  }
+                  Generator g  = new Generator();
+                  g.name = name;
+                  g.path = path;
+                  String filename = config_.rootDir + config_.dataPath + name;
+                  Graph graph_ = i.loadGraph(filename);
+                  if (graph_ == null) {
+                      map.put("error", "1");
+                      out.print(i.getJson(map));
+                      return;
+                  }
+                  g.lockGraph(graph_);
+                  graph_.remove_edge(from, to, g.DIRECTED);
+                  g.saveGraph(graph_);
+                  map.put("error", "0");
+                  map.put("from", "" + from);
+                  map.put("to", "" + to);
+                  out.print(i.getJson(map));
+                  return;
+               }
           }
-	
 	
 %>

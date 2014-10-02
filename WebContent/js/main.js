@@ -94,6 +94,17 @@ function getInputs(object)
 		});
 	});
 	
-	
+	/**
+	 * Remove edge
+	 */
+	$('.form.removeEdge form').on('submit', function(event) {
+		event.preventDefault();
+		var values = getInputs($(this));
+		$.post(root + '/slave.jsp', {action:'removeEdge', form:values}, function(data) {
+			if (data.error == 0) {
+				sys.pruneEdge('edge_' + data.from + "_" + data.to);
+			}
+		});
+	});
 	
 })();
