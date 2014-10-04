@@ -102,7 +102,7 @@ function getInputs(object)
 		var values = getInputs($(this));
 		$.post(root + '/slave.jsp', {action:'removeEdge', form:values}, function(data) {
 			if (data.error == 0) {
-				sys.pruneEdge('edge_' + data.from + "_" + data.to);
+				sys.pruneEdge(eval('window.edge_' + data.from + "_" + data.to));
 			}
 		});
 	});
