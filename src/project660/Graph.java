@@ -2,53 +2,49 @@ package project660;
 
 import java.io.Serializable;
 
-public class Graph implements Serializable
-{
+public class Graph implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    Edgenode[] edges;      /* adjacency info */
-    int[] indegree;        /* indegree of each vertex */
-    int[] outdegree;       /* outdegree of each vertex */
-    int nvertices;         /* number of vertices in graph */
-    int nedges;            /* number of edges in graph */
-    Boolean directed;      /* is the graph directed? */
+    Edgenode[] edges; /* adjacency info */
+    int[] indegree; /* indegree of each vertex */
+    int[] outdegree; /* outdegree of each vertex */
+    int nvertices; /* number of vertices in graph */
+    int nedges; /* number of edges in graph */
+    Boolean directed; /* is the graph directed? */
     public int pathLength;
     double probability;
-    int[] parent;          /* discovery relation */
+    int[] parent; /* discovery relation */
     public int MAXV = 0;
 
-    public Graph(int n, double p, Boolean directed)
-    {
-        this.MAXV     = n;
+    public Graph(int n, double p, Boolean directed) {
+        this.MAXV = n;
         this.directed = directed;
 
-        edges     = new Edgenode[MAXV + 1];
+        edges = new Edgenode[MAXV + 1];
         outdegree = new int[MAXV + 1];
-        indegree  = new int[MAXV + 1];
+        indegree = new int[MAXV + 1];
 
-        for (int i = 1; i <= MAXV; i++)  {
-            this.indegree[i]  = 0;
+        for (int i = 1; i <= MAXV; i++) {
+            this.indegree[i] = 0;
             this.outdegree[i] = 0;
-            this.edges[i]     = null;
+            this.edges[i] = null;
         }
 
-        this.pathLength  = MAXV;
+        this.pathLength = MAXV;
         this.probability = p;
     }
 
     /**
      * Add single vertex
      */
-    public void insert_vertex()
-    {
-        nvertices ++;
+    public void insert_vertex() {
+        nvertices++;
     }
 
     /**
      * Add vertex to the existing graph
      */
-    public void addVertex(int n)
-    {
+    public void addVertex(int n) {
         insert_vertex(n);
         MAXV = nvertices;
         reinitArrays(n);
@@ -60,9 +56,8 @@ public class Graph implements Serializable
      * 
      * @param int n Vertex id
      */
-    public void removeVertex(int n)
-    {
-        Edgenode p    = null;
+    public void removeVertex(int n) {
+        Edgenode p = null;
         Edgenode last = null;
 
         for (int i = 1; i <= this.nvertices; i++) {
@@ -71,16 +66,19 @@ public class Graph implements Serializable
                 this.edges[i] = null;
                 continue;
             }
+
             last = null;
-            p    = this.edges[i];
+            p = this.edges[i];
             // remove incoming edges
             while (p != null) {
                 if (p.y == n) {
-                    if (last == null)
+                    if (last == null) {
                         edges[i] = p.next;
-                    else
+                    } else {
                         last.next = p.next;
+                    }
                 }
+
                 last = p;
                 p = p.next;
             }
@@ -90,14 +88,19 @@ public class Graph implements Serializable
         for (int i = n + 1; i <= this.nvertices; i++) {
             edges[i - 1] = edges[i];
         }
-        nvertices --;
+
+        nvertices--;
         MAXV = nvertices;
         reinitArrays(nvertices);
+
         for (int i = 1; i <= this.nvertices; i++) {
             p = edges[i];
+
             while (p != null) {
-                if (p.y > n)
-                    p.y --;
+                if (p.y > n) {
+                    p.y--;
+                }
+
                 p = p.next;
             }
         }
@@ -105,23 +108,27 @@ public class Graph implements Serializable
         recountInOut();
     }
 
-    private void recountInOut()
-    {
-        Edgenode p    = null;
+    private void recountInOut() {
+        Edgenode p = null;
+
         for (int i = 1; i <= this.nvertices; i++) {
             outdegree[i] = 0;
-            indegree[i]  = 0;
+            indegree[i] = 0;
         }
+
         for (int i = 1; i <= this.nvertices; i++) {
             p = edges[i];
-            if (p == null)
+
+            if (p == null) {
                 outdegree[i] = 0;
-            else {
+            } else {
+
                 while (p != null) {
-                    outdegree[i] ++;
-                    indegree[p.y] ++;
+                    outdegree[i]++;
+                    indegree[p.y]++;
                     p = p.next;
                 }
+
             }
         }
     }
@@ -129,8 +136,7 @@ public class Graph implements Serializable
     /**
      * Reinitialize arrays
      */
-    private void reinitArrays(int n)
-    {
+    private void reinitArrays(int n) {
         Edgenode[] newedges = new Edgenode[edges.length + n];
         System.arraycopy(edges, 0, newedges, 0, edges.length);
         edges = newedges;
@@ -149,8 +155,7 @@ public class Graph implements Serializable
      * 
      * @param int n
      */
-    public void insert_vertex(int n)
-    {
+    public void insert_vertex(int n) {
         this.nvertices += n;
     }
 
@@ -161,20 +166,20 @@ public class Graph implements Serializable
      * @param y
      * @param directed
      */
-    public void insert_edge(int x, int y, Boolean directed)
-    {
+    public void insert_edge(int x, int y, Boolean directed) {
         Edgenode p = new Edgenode(); /* temporary pointer */
-        p.y        = y;
-        p.next     = this.edges[x];
+        p.y = y;
+        p.next = this.edges[x];
 
-        this.edges[x] = p;           /* insert at head of list */
-        this.outdegree[x] ++;
-        this.indegree[y] ++;
+        this.edges[x] = p; /* insert at head of list */
+        this.outdegree[x]++;
+        this.indegree[y]++;
 
-        if (!directed)
+        if (!directed) {
             insert_edge(y, x, true);
-        else
-            this.nedges ++;
+        } else {
+            this.nedges++;
+        }
     }
 
     /**
@@ -182,25 +187,28 @@ public class Graph implements Serializable
      * 
      * @param int n Vertex id
      */
-    public void remove_edge(int x, int y, Boolean directed)
-    {
-        Edgenode p    = null;
+    public void remove_edge(int x, int y, Boolean directed) {
+        Edgenode p = null;
         Edgenode last = null;
 
         for (int i = 1; i <= this.nvertices; i++) {
-            if (x != i)
+            if (x != i) {
                 continue;
+            }
 
             last = null;
-            p    = this.edges[i];
+            p = this.edges[i];
+
             // remove incoming edges
             while (p != null) {
                 if (p.y == y) {
-                    if (last == null)
+                    if (last == null) {
                         edges[i] = p.next;
-                    else
+                    } else {
                         last.next = p.next;
+                    }
                 }
+
                 last = p;
                 p = p.next;
             }
@@ -209,18 +217,21 @@ public class Graph implements Serializable
         // re-count in/out degrees
         for (int i = 1; i <= this.nvertices; i++) {
             outdegree[i] = 0;
-            indegree[i]  = 0;
+            indegree[i] = 0;
         }
+
         for (int i = 1; i <= this.nvertices; i++) {
             p = edges[i];
-            if (p == null)
+            if (p == null) {
                 outdegree[i] = 0;
-            else {
+            } else {
+
                 while (p != null) {
-                    outdegree[i] ++;
-                    indegree[p.y] ++;
+                    outdegree[i]++;
+                    indegree[p.y]++;
                     p = p.next;
                 }
+
             }
         }
     }
@@ -230,8 +241,7 @@ public class Graph implements Serializable
      * 
      * @return String
      */
-    public String print_graph()
-    {
+    public String print_graph() {
         String out = "";
 
         out += "G (E=" + this.nedges;
@@ -247,15 +257,14 @@ public class Graph implements Serializable
      * 
      * @param Boolean full means nothing
      */
-    public String print_graph(boolean full)
-    {
-        String s = "",
-                j = "";
+    public String print_graph(boolean full) {
+        String s = "", j = "";
 
         Edgenode p = new Edgenode();
 
         for (int i = 1; i <= this.nvertices; i++) {
             p = this.edges[i];
+
             if (p == null) {
                 j += i + ", ";
             } else {
@@ -265,7 +274,8 @@ public class Graph implements Serializable
                     p = p.next;
                 }
             }
-            s += j.substring(0, j.length()-2) + "<br>";
+
+            s += j.substring(0, j.length() - 2) + "<br>";
             j = "";
         }
 
@@ -277,8 +287,7 @@ public class Graph implements Serializable
      * 
      * @return int
      */
-    public int getNvertices()
-    {
+    public int getNvertices() {
         return this.nvertices;
     }
 
@@ -289,8 +298,7 @@ public class Graph implements Serializable
      * 
      * @return Edgenode
      */
-    public Edgenode getEdge(int n)
-    {
+    public Edgenode getEdge(int n) {
         return this.edges[n];
     }
 
@@ -299,8 +307,7 @@ public class Graph implements Serializable
      * 
      * @return array
      */
-    public Edgenode[] getEdge()
-    {
+    public Edgenode[] getEdge() {
         return this.edges;
     }
 
@@ -309,8 +316,7 @@ public class Graph implements Serializable
      * 
      * @return array
      */
-    public int[] getIndegree()
-    {
+    public int[] getIndegree() {
         return this.indegree;
     }
 
@@ -319,8 +325,7 @@ public class Graph implements Serializable
      * 
      * @return array
      */
-    public int[] getOutdegree()
-    {
+    public int[] getOutdegree() {
         return this.outdegree;
     }
 

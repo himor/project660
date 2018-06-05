@@ -20,8 +20,7 @@ import java.util.TreeMap;
  * 
  * @author m.gordo <himor.cre@gmail.com>
  */
-public class Interactor
-{
+public class Interactor {
     /**
      * Size of max cycle
      */
@@ -31,8 +30,7 @@ public class Interactor
      * @deprecated
      */
     @Deprecated
-    public static String getString(String message) throws IOException
-    {
+    public static String getString(String message) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
         System.out.print(message);
         return in.readLine();
@@ -42,8 +40,7 @@ public class Interactor
      * @deprecated
      */
     @Deprecated
-    public static int getInt(String message) throws IOException
-    {
+    public static int getInt(String message) throws IOException {
         int n = -1;
 
         while (n < 0) {
@@ -63,8 +60,7 @@ public class Interactor
      * @deprecated
      */
     @Deprecated
-    public static double getDouble(String message) throws IOException
-    {
+    public static double getDouble(String message) throws IOException {
         double n = -1;
 
         while (n < 0) {
@@ -82,14 +78,14 @@ public class Interactor
 
     /**
      * Load file list from the directory
+     * 
      * @deprecated
      * @param String path Directory to parse
      * 
      * @return HashMap<String, String>
      */
     @Deprecated
-    public HashMap<String, String> getFiles(String path)
-    {
+    public HashMap<String, String> getFiles(String path) {
         HashMap<String, String> m = new HashMap<String, String>();
 
         File folder = new File(path + "/data/");
@@ -110,10 +106,9 @@ public class Interactor
      * @return Map<String, FileInfo>
      * @throws IOException
      */
-    public Map<String, FileInfo> getFileList(String root) throws IOException
-    {
+    public Map<String, FileInfo> getFileList(String root) throws IOException {
         Map<String, FileInfo> m = new HashMap<String, FileInfo>();
-        MapComparator mpc       = new MapComparator(m);
+        MapComparator mpc = new MapComparator(m);
         Map<String, FileInfo> r = new TreeMap<String, FileInfo>(mpc);
 
         ObjectInputStream objectinputstream = null;
@@ -127,8 +122,7 @@ public class Interactor
                     m.put(readCase.getFilename(), readCase);
                 }
 
-            }
-            while (readCase != null);
+            } while (readCase != null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -148,11 +142,10 @@ public class Interactor
      * @param FileInfo fi FileInfo
      * @throws IOException
      */
-    public void addToFileList(String root, FileInfo fi) throws IOException
-    {
+    public void addToFileList(String root, FileInfo fi) throws IOException {
         Map<String, FileInfo> m = getFileList(root);
 
-        FileOutputStream fout  = new FileOutputStream(root + "filelist.txt");
+        FileOutputStream fout = new FileOutputStream(root + "filelist.txt");
         ObjectOutputStream oos = new ObjectOutputStream(fout);
 
         for (Map.Entry<String, FileInfo> entry : m.entrySet()) {
@@ -170,15 +163,15 @@ public class Interactor
      * 
      * @throws IOException
      */
-    public void removeFromFileList(String root, FileInfo fi) throws IOException
-    {
+    public void removeFromFileList(String root, FileInfo fi) throws IOException {
         Map<String, FileInfo> m = getFileList(root);
-        FileOutputStream fout  = new FileOutputStream(root + "filelist.txt");
+        FileOutputStream fout = new FileOutputStream(root + "filelist.txt");
         ObjectOutputStream oos = new ObjectOutputStream(fout);
 
         for (Map.Entry<String, FileInfo> entry : m.entrySet()) {
-            if (!entry.getKey().equals(fi.getFilename()))
+            if (!entry.getKey().equals(fi.getFilename())) {
                 oos.writeObject(entry.getValue());
+            }
         }
 
         oos.close();
@@ -191,17 +184,17 @@ public class Interactor
      * 
      * @throws IOException
      */
-    public void updateFileList(String root, FileInfo fi) throws IOException
-    {
+    public void updateFileList(String root, FileInfo fi) throws IOException {
         Map<String, FileInfo> m = getFileList(root);
-        FileOutputStream fout  = new FileOutputStream(root + "filelist.txt");
+        FileOutputStream fout = new FileOutputStream(root + "filelist.txt");
         ObjectOutputStream oos = new ObjectOutputStream(fout);
 
         for (Map.Entry<String, FileInfo> entry : m.entrySet()) {
-            if (!entry.getKey().equals(fi.getFilename()))
+            if (!entry.getKey().equals(fi.getFilename())) {
                 oos.writeObject(entry.getValue());
-            else
+            } else {
                 oos.writeObject(fi);
+            }
         }
 
         oos.close();
@@ -214,14 +207,14 @@ public class Interactor
      * 
      * @throws IOException
      */
-    public Boolean checkFileList(String root, String name) throws IOException
-    {
+    public Boolean checkFileList(String root, String name) throws IOException {
         Map<String, FileInfo> m = getFileList(root);
         Boolean result = false;
 
         for (Map.Entry<String, FileInfo> entry : m.entrySet()) {
-            if (entry.getKey().equals(name))
+            if (entry.getKey().equals(name)) {
                 result = true;
+            }
         }
 
         return result;
@@ -236,8 +229,7 @@ public class Interactor
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public Graph loadGraph(String filename) throws IOException, ClassNotFoundException
-    {
+    public Graph loadGraph(String filename) throws IOException, ClassNotFoundException {
         /**
          * Load graph object from the file
          */
@@ -248,12 +240,13 @@ public class Interactor
         try {
             fin = new FileInputStream(filename);
             ois = new ObjectInputStream(fin);
-            g   = (Graph) ois.readObject();
+            g = (Graph) ois.readObject();
         } catch (FileNotFoundException e) {
 
         } finally {
-            if (ois != null)
+            if (ois != null) {
                 ois.close();
+            }
         }
 
         return g;
@@ -266,12 +259,11 @@ public class Interactor
      * @return String
      * @throws Exception
      */
-    public String getAnalisys(Graph g) throws Exception
-    {
+    public String getAnalisys(Graph g) throws Exception {
         String output = g.print_graph();
 
         // # of nodes with indegree/outdegree 0
-        int indegree_zero  = 0;
+        int indegree_zero = 0;
         int outdegree_zero = 0;
 
         for (int i = 1; i <= g.getNvertices(); i++) {
@@ -282,8 +274,10 @@ public class Interactor
                 outdegree_zero++;
         }
 
-        output += "<br>Number of nodes with zero  in-degree: " + indegree_zero + " (" + ((double) indegree_zero / g.getNvertices() * 100) + "%)";
-        output += "<br>Number of nodes with zero out-degree: " + outdegree_zero + " (" + ((double) outdegree_zero / g.getNvertices() * 100) + "%)";
+        output += "<br>Number of nodes with zero  in-degree: " + indegree_zero + " ("
+                + ((double) indegree_zero / g.getNvertices() * 100) + "%)";
+        output += "<br>Number of nodes with zero out-degree: " + outdegree_zero + " ("
+                + ((double) outdegree_zero / g.getNvertices() * 100) + "%)";
 
         // size of a largest weakly connected component
         Wcc wcc = new Wcc(g);
@@ -298,8 +292,9 @@ public class Interactor
 
         // searching for cycles
         Cyclotron lhc = new Cyclotron(g);
-        for (int i = 2; i <= MAX_CYCLE; i ++)
+        for (int i = 2; i <= MAX_CYCLE; i++) {
             output += "" + lhc.execute(i);
+        }
 
         return output;
     }
@@ -311,20 +306,18 @@ public class Interactor
      * 
      * @return String
      */
-    public String getJson(Map <String, String> map)
-    {
+    public String getJson(Map<String, String> map) {
         String result = "";
 
-        for (Map.Entry<String, String> entry: map.entrySet()) {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
             result += "\"" + entry.getKey() + "\":\"" + entry.getValue() + "\",";
         }
 
-        if (result.length() > 0)
+        if (result.length() > 0) {
             result = result.substring(0, result.length() - 1);
+        }
 
         return "{" + result + "}";
     }
-
-
 
 }

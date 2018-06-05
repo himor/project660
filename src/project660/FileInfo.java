@@ -9,8 +9,7 @@ import java.util.Date;
  * 
  * @author Mike Gordo <himor.cre@gmail.com>
  */
-public class FileInfo implements Serializable
-{
+public class FileInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     protected String filename;
@@ -20,23 +19,21 @@ public class FileInfo implements Serializable
     protected String report;
     protected String fullreport;
 
-    public FileInfo()
-    {
-        this.filename   = "";
-        this.filepath   = "";
-        this.date       = new Date();
-        this.locked     = false;
-        this.report     = "";
+    public FileInfo() {
+        this.filename = "";
+        this.filepath = "";
+        this.date = new Date();
+        this.locked = false;
+        this.report = "";
         this.fullreport = "";
     }
 
-    public void loadFileInfo(FileInfo fi)
-    {
-        this.filename   = fi.filename;
-        this.filepath   = fi.filepath;
-        this.date       = fi.date;
-        this.locked     = fi.locked;
-        this.report     = fi.report;
+    public void loadFileInfo(FileInfo fi) {
+        this.filename = fi.filename;
+        this.filepath = fi.filepath;
+        this.date = fi.date;
+        this.locked = fi.locked;
+        this.report = fi.report;
         this.fullreport = fi.fullreport;
     }
 

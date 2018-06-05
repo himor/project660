@@ -1,14 +1,12 @@
 package project660;
 
-public class Pair 
-{
+public class Pair {
     private int n;
     private double p;
-    
+
     public Pair() {
-        
     }
-    
+
     public Pair(int n2, double p2) {
         setN(n2);
         setP(p2);
@@ -29,5 +27,5 @@ public class Pair
     public void setP(double p) {
         this.p = p;
     }
-    
+
 }
